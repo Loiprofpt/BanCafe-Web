@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tin Tức & Kiến Thức Cà Phê – Pureva Craft</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        coffee: {
+                            DEFAULT: '#634A36',
+                            light: '#533E2D',
+                            lighter: '#7A6452',
+                            accent: '#F4E8D7',
+                            gold: '#E0C294',
+                            dark: '#634A36',
+                        },
+                        forest: {
+                            DEFAULT: '#314F22',
+                            hover: '#253B1A',
+                            light: '#3C612B',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #634A36;
+            color: #F4E8D7;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-coffee-dark">
+
+    <!-- Header / Navbar Container -->
+    <header id="navbar-container" class="bg-coffee-dark/95 border-b border-coffee-lighter sticky top-0 z-40 backdrop-blur-sm">
+        <!-- Will be loaded dynamically from app.js -->
+    </header>
+
+    <!-- Page Title Header -->
+    <section class="relative py-16 bg-coffee bg-cover bg-center border-b border-coffee-lighter" style="background-image: url('https://images.unsplash.com/photo-1511920170033-f8396924c348?q=80&w=1974&auto=format&fit=crop');">
+        <div class="absolute inset-0 bg-black/75"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
+            <h1 class="text-3xl sm:text-4xl font-bold text-white">Tin Tức & Nhật Ký Nông Trại</h1>
+            <p class="text-sm text-coffee-accent max-w-md mx-auto">Cập nhật những câu chuyện thường nhật, quy trình thu hoạch hữu cơ và mẹo pha chế cà phê ngon từ nghệ nhân.</p>
+        </div>
+    </section>
+
+    <!-- Main Blogs Grid Content -->
+    <main class="flex-grow py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div id="blogs-grid" class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <!-- Blogs list will be loaded dynamically from app.js via C# WebView2 -->
+                <div class="col-span-full flex flex-col justify-center items-center h-64 space-y-3">
+                    <svg class="animate-spin h-8 w-8 text-coffee-gold" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="text-xs text-coffee-accent">Đang tải nhật ký từ cơ sở dữ liệu...</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Container -->
+    <footer id="footer-container" class="bg-coffee-dark border-t border-coffee-lighter text-coffee-accent">
+        <!-- Will be loaded dynamically from app.js -->
+    </footer>
+
+    <!-- Shopping Cart Slide-out Drawer Container -->
+    <div id="cart-drawer-container"></div>
+
+    <!-- Blog Detail Modal Container -->
+    <div id="blog-detail-modal-container" class="hidden"></div>
+
+    <!-- Core App JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>

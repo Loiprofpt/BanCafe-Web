@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pureva – Cà phê hữu cơ đặc sản từ Lâm Đồng</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        coffee: {
+                            DEFAULT: '#634A36',
+                            light: '#533E2D',
+                            lighter: '#7A6452',
+                            accent: '#F4E8D7',
+                            gold: '#E0C294',
+                            dark: '#634A36',
+                        },
+                        forest: {
+                            DEFAULT: '#314F22',
+                            hover: '#253B1A',
+                            light: '#3C612B',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #634A36;
+            color: #F4E8D7;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+        .text-shadow-lg {
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.9);
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-coffee-dark">
+
+    <!-- Header / Navbar Container -->
+    <header id="navbar-container" class="bg-coffee-dark/95 border-b border-coffee-lighter sticky top-0 z-40 backdrop-blur-sm">
+        <!-- Will be loaded dynamically from app.js -->
+    </header>
+
+    <!-- Hero Section -->
+    <section class="relative bg-black min-h-[85vh] flex items-center justify-center overflow-hidden">
+        <!-- Background Image Mockup -->
+        <div class="absolute inset-0 bg-cover bg-center opacity-60 filter brightness-50" style="background-image: url('https://images.unsplash.com/photo-1509042239860-f550ce710b93?q=80&w=1974&auto=format&fit=crop');"></div>
+        <div class="absolute inset-0 bg-gradient-to-t from-coffee-dark via-transparent to-black/70"></div>
+        
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-8 py-20">
+            <span class="text-coffee-gold font-semibold tracking-widest text-sm uppercase">CÀ PHÊ HỮU CƠ ĐẶC SẢN LÂM ĐỒNG</span>
+            <h1 class="text-4xl sm:text-6xl font-extrabold text-white tracking-tight leading-tight text-shadow-lg max-w-4xl mx-auto">
+                Pureva – Xanh từ gốc, Vẹn từ tâm, Hoá nâng tầm
+            </h1>
+            <p class="text-lg sm:text-xl text-coffee-accent max-w-2xl mx-auto text-shadow-lg leading-relaxed">
+                Từng hạt cà phê đặc sản được vun trồng tự nhiên, thu hoạch thủ công chín mọng và chế biến tỉ mỉ theo tiêu chuẩn bền vững tại vùng cao Lâm Đồng.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center items-center gap-4 pt-4">
+                <a href="shop.html" class="w-full sm:w-auto bg-forest hover:bg-forest-hover text-white text-center font-bold px-8 py-4 rounded-md transition-all duration-300 shadow-lg tracking-wider uppercase text-sm">
+                    MUA NGAY
+                </a>
+                <a href="customize.html" class="w-full sm:w-auto border border-coffee-gold text-coffee-gold hover:bg-coffee-gold hover:text-coffee-dark text-center font-bold px-8 py-4 rounded-md transition-all duration-300 tracking-wider uppercase text-sm">
+                    BAO BÌ CÁ NHÂN HOÁ
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Story Section -->
+    <section class="py-24 bg-coffee-light border-y border-coffee-lighter">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                <div class="space-y-6">
+                    <span class="text-coffee-gold font-semibold tracking-wider text-xs uppercase">CÂU CHUYỆN THƯƠNG HIỆU</span>
+                    <h2 class="text-3xl sm:text-4xl font-bold text-white leading-tight">Từ vườn suối tinh khiết đến tách cà phê sạch trọn vẹn</h2>
+                    <p class="text-coffee-accent leading-relaxed text-justify">
+                        Pureva được khởi nguồn từ tình yêu mãnh liệt với vùng đất đỏ bazan Lâm Đồng trù phú. Chúng tôi chứng kiến những vườn cà phê bị lạm dụng phân bón hóa học, làm mất đi hương vị mộc mạc nguyên bản. Đó là lý do Pureva ra đời, theo đuổi triết lý canh tác hữu cơ thuần tự nhiên.
+                    </p>
+                    <p class="text-coffee-accent leading-relaxed text-justify">
+                        Tại nông trại Pureva, những cây cà phê Arabica, Robusta sống hòa hợp cùng cỏ dại, côn trùng dưới tán cây che bóng mát. Chúng được chăm bón bằng phân sinh học tự chế từ vỏ cà phê ủ hoai. Nguồn nước tưới dồi dào chảy từ suối khe tự nhiên. Tách cà phê Pureva không chỉ mang hương vị ngọt ngào từ mật hoa quả, mà còn chứa đựng cả tấm lòng gìn giữ sinh thái môi trường của chúng tôi.
+                    </p>
+                    <div class="pt-4">
+                        <a href="shop.html" class="inline-block border-b border-coffee-gold text-coffee-gold hover:text-white transition-colors pb-1 text-sm font-semibold tracking-wider">KHÁM PHÁ CÁC SẢN PHẨM &rarr;</a>
+                    </div>
+                </div>
+                <div class="relative rounded-lg overflow-hidden shadow-2xl aspect-[4/3] bg-coffee">
+                    <img src="https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=2070&auto=format&fit=crop" alt="Thu hoạch cà phê hữu cơ" class="w-full h-full object-cover">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision, Mission & Core Values -->
+    <section class="py-24 bg-coffee-dark">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-20">
+            <!-- Vision & Mission -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="bg-coffee-light border border-coffee-lighter p-8 rounded-lg space-y-4">
+                    <div class="p-3 bg-forest/20 rounded-lg inline-block text-coffee-gold">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white font-serif">Tầm Nhìn</h3>
+                    <p class="text-sm text-coffee-accent leading-relaxed text-justify">
+                        Trở thành biểu tượng cà phê hữu cơ đặc sản hàng đầu Việt Nam, đưa nông sản sạch Lâm Đồng vươn tầm quốc tế dưới mô hình chuỗi cung ứng bền vững và có trách nhiệm xã hội cao.
+                    </p>
+                </div>
+                <div class="bg-coffee-light border border-coffee-lighter p-8 rounded-lg space-y-4">
+                    <div class="p-3 bg-forest/20 rounded-lg inline-block text-coffee-gold">
+                        <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-white font-serif">Sứ Mệnh</h3>
+                    <p class="text-sm text-coffee-accent leading-relaxed text-justify">
+                        Đem lại ly cà phê hữu cơ tinh khiết tuyệt hảo đến tay người dùng, đảm bảo sinh kế bền vững cho người nông dân thiểu số và khôi phục sự cân bằng đa dạng sinh học cho đất trồng.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Core Values -->
+            <div class="space-y-12">
+                <div class="text-center">
+                    <h2 class="font-serif text-3xl md:text-4xl text-coffee-gold text-center mb-12">Giá trị cốt lõi</h2>
+                </div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                    <div class="p-8 border border-coffee-lighter rounded-lg text-center hover:border-coffee-gold/50 transition-colors duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-eye w-10 h-10 text-coffee-gold mx-auto mb-4">
+                            <path d="M2.062 12.348a1 1 0 0 1 0-.696 10.75 10.75 0 0 1 19.876 0 1 1 0 0 1 0 .696 10.75 10.75 0 0 1-19.876 0"></path>
+                            <circle cx="12" cy="12" r="3"></circle>
+                        </svg>
+                        <h3 class="font-serif text-xl text-coffee-gold mb-3">Minh Bạch</h3>
+                        <p class="text-coffee-accent text-sm">Nguồn gốc rõ ràng, từ nông trại đến tách cà phê.</p>
+                    </div>
+                    
+                    <div class="p-8 border border-coffee-lighter rounded-lg text-center hover:border-coffee-gold/50 transition-colors duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-leaf w-10 h-10 text-coffee-gold mx-auto mb-4">
+                            <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                            <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+                        </svg>
+                        <h3 class="font-serif text-xl text-coffee-gold mb-3">Bền Vững</h3>
+                        <p class="text-coffee-accent text-sm">Canh tác hữu cơ, bảo vệ môi trường sống.</p>
+                    </div>
+                    
+                    <div class="p-8 border border-coffee-lighter rounded-lg text-center hover:border-coffee-gold/50 transition-colors duration-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-palette w-10 h-10 text-coffee-gold mx-auto mb-4">
+                            <circle cx="13.5" cy="6.5" r=".5" fill="currentColor"></circle>
+                            <circle cx="17.5" cy="10.5" r=".5" fill="currentColor"></circle>
+                            <circle cx="8.5" cy="7.5" r=".5" fill="currentColor"></circle>
+                            <circle cx="6.5" cy="12.5" r=".5" fill="currentColor"></circle>
+                            <path d="M12 2C6.5 2 2 6.5 2 12s4.5 10 10 10c.926 0 1.648-.746 1.648-1.688 0-.437-.18-.835-.437-1.125-.29-.289-.438-.652-.438-1.125a1.64 1.64 0 0 1 1.668-1.668h1.996c3.051 0 5.555-2.503 5.555-5.554C21.965 6.012 17.461 2 12 2z"></path>
+                        </svg>
+                        <h3 class="font-serif text-xl text-coffee-gold mb-3">Nghệ Thuật</h3>
+                        <p class="text-coffee-accent text-sm">Rang xay thủ công, tôn vinh hương vị đích thực.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mock Live Farm Feed -->
+    <section class="py-24 bg-coffee-light border-y border-coffee-lighter">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12 text-center">
+            <div class="space-y-4">
+                <span class="text-coffee-gold font-semibold tracking-wider text-xs uppercase">LIVE CAMERA TỪ NÔNG TRẠI LÂM ĐỒNG</span>
+                <h2 class="text-3xl font-bold text-white">Giám sát trang trại thời gian thực</h2>
+                <p class="text-sm text-coffee-accent max-w-2xl mx-auto">
+                    Chúng tôi công khai live feed camera tại khu vực vườn ươm hữu cơ và khu giàn phơi nhà kính để bạn luôn kiểm chứng được quy trình canh tác minh bạch của Pureva.
+                </p>
+            </div>
+            
+            <div class="relative max-w-4xl mx-auto aspect-video rounded-lg overflow-hidden shadow-2xl border-4 border-coffee-dark bg-black">
+                <!-- Embedding a beautiful nature/coffee farm landscape loop from YouTube as Live Camera mockup -->
+                <iframe class="absolute inset-0 w-full h-full" width="1920" height="1080" src="https://www.youtube.com/embed/la5xZYw78Xw?autoplay=1&mute=1&controls=0&loop=1&playlist=la5xZYw78Xw" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                <div class="absolute top-4 left-4 bg-red-600 text-white text-xs font-bold px-2.5 py-1 rounded flex items-center shadow-lg animate-pulse">
+                    <span class="h-2 w-2 bg-white rounded-full mr-2"></span>
+                    LIVE STREAM
+                </div>
+                <div class="absolute bottom-4 right-4 bg-black/60 text-white text-xs px-2.5 py-1 rounded">
+                    Lâm Đồng - Cổng Camera #1
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lot Harvesting Tracking Status -->
+    <section class="py-20 bg-coffee-dark border-t border-coffee-lighter">
+        <div class="max-w-7xl mx-auto px-4 md:px-8">
+            <div class="text-center mb-12">
+                <h2 class="font-serif text-3xl md:text-4xl text-coffee-gold text-center">Theo dõi theo lô</h2>
+            </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <!-- Card 1: Lô A1 -->
+                <div class="relative rounded-lg overflow-hidden group cursor-pointer border border-coffee-lighter">
+                    <img src="https://pureva-craft.lovable.app/assets/coffee-product-1-BCbJl_lO.jpg" alt="Lô A1 - Đang thu hoạch" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 left-0 right-0 bg-coffee-dark/80 px-3 py-2">
+                        <div class="flex items-center gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3 h-3 text-coffee-gold flex-shrink-0">
+                                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span class="text-coffee-gold text-xs font-sans font-semibold">Lô A1 - Đang thu hoạch</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2: Lô B2 -->
+                <div class="relative rounded-lg overflow-hidden group cursor-pointer border border-coffee-lighter">
+                    <img src="https://pureva-craft.lovable.app/assets/about-farmer-CiNmmsn9.jpg" alt="Lô B2 - Đang phơi" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 left-0 right-0 bg-coffee-dark/80 px-3 py-2">
+                        <div class="flex items-center gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3 h-3 text-coffee-gold flex-shrink-0">
+                                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span class="text-coffee-gold text-xs font-sans font-semibold">Lô B2 - Đang phơi</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3: Lô C3 -->
+                <div class="relative rounded-lg overflow-hidden group cursor-pointer border border-coffee-lighter">
+                    <img src="https://pureva-craft.lovable.app/assets/coffee-product-2-DLLOcpre.jpg" alt="Lô C3 - Đang rang" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 left-0 right-0 bg-coffee-dark/80 px-3 py-2">
+                        <div class="flex items-center gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3 h-3 text-coffee-gold flex-shrink-0">
+                                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span class="text-coffee-gold text-xs font-sans font-semibold">Lô C3 - Đang rang</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 4: Lô D4 -->
+                <div class="relative rounded-lg overflow-hidden group cursor-pointer border border-coffee-lighter">
+                    <img src="https://pureva-craft.lovable.app/assets/hero-farm-B0R7ycka.jpg" alt="Lô D4 - Sẵn sàng" class="w-full h-48 object-cover group-hover:scale-105 transition-transform duration-500">
+                    <div class="absolute bottom-0 left-0 right-0 bg-coffee-dark/80 px-3 py-2">
+                        <div class="flex items-center gap-1.5">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-map-pin w-3 h-3 text-coffee-gold flex-shrink-0">
+                                <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"></path>
+                                <circle cx="12" cy="10" r="3"></circle>
+                            </svg>
+                            <span class="text-coffee-gold text-xs font-sans font-semibold">Lô D4 - Sẵn sàng</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer Container -->
+    <footer id="footer-container" class="bg-coffee-dark border-t border-coffee-lighter text-coffee-accent">
+        <!-- Will be loaded dynamically from app.js -->
+    </footer>
+
+    <!-- Shopping Cart Slide-out Drawer Container -->
+    <div id="cart-drawer-container"></div>
+
+    <!-- Core App JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>

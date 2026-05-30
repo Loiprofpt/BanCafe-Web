@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Tin Tức – Pureva Craft</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        coffee: {
+                            DEFAULT: '#634A36',
+                            light: '#533E2D',
+                            lighter: '#7A6452',
+                            accent: '#F4E8D7',
+                            gold: '#E0C294',
+                            dark: '#634A36',
+                        },
+                        forest: {
+                            DEFAULT: '#314F22',
+                            hover: '#253B1A',
+                            light: '#3C612B',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #634A36;
+            color: #F4E8D7;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(99, 74, 54, 0.3);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #7A6452;
+            border-radius: 3px;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-coffee-dark">
+
+    <!-- Header / Navbar Container -->
+    <header id="navbar-container" class="bg-coffee-dark/95 border-b border-coffee-lighter sticky top-0 z-40 backdrop-blur-sm">
+        <!-- Will be loaded dynamically from app.js -->
+    </header>
+
+    <!-- Breadcrumbs Navigation -->
+    <nav class="max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-6 text-xs text-coffee-accent/60 font-sans">
+        <div class="flex items-center space-x-2">
+            <a href="index.html" class="hover:text-coffee-gold transition-colors">Trang chủ</a>
+            <span>/</span>
+            <a href="blog.html" class="hover:text-coffee-gold transition-colors">Tin tức</a>
+            <span>/</span>
+            <span id="breadcrumb-title" class="text-coffee-gold truncate max-w-[200px] sm:max-w-xs md:max-w-md">Chi tiết bài viết</span>
+        </div>
+    </nav>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow py-8">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6">
+            
+            <!-- Blog Main Dynamic Wrapper -->
+            <article id="blog-detail-content" class="space-y-8">
+                <!-- Loading State -->
+                <div class="flex flex-col justify-center items-center py-24 space-y-4">
+                    <svg class="animate-spin h-8 w-8 text-coffee-gold" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="text-xs text-coffee-accent">Đang tải nội dung bài viết...</span>
+                </div>
+            </article>
+
+            <hr class="border-coffee-lighter/40 my-16">
+
+            <!-- Related Articles Container -->
+            <section id="related-blogs-section" class="hidden space-y-8">
+                <!-- Will be loaded dynamically from app.js -->
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer Container -->
+    <footer id="footer-container" class="bg-coffee-dark border-t border-coffee-lighter text-coffee-accent">
+        <!-- Will be loaded dynamically from app.js -->
+    </footer>
+
+    <!-- Shopping Cart Slide-out Drawer Container -->
+    <div id="cart-drawer-container"></div>
+
+    <!-- Core App JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>

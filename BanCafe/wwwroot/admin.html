@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hệ Thống Quản Trị – Pureva Craft</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        coffee: {
+                            DEFAULT: '#634A36',
+                            light: '#533E2D',
+                            lighter: '#7A6452',
+                            accent: '#F4E8D7',
+                            gold: '#E0C294',
+                            dark: '#634A36',
+                        },
+                        forest: {
+                            DEFAULT: '#314F22',
+                            hover: '#253B1A',
+                            light: '#3C612B',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #634A36;
+            color: #F4E8D7;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-coffee-dark">
+
+    <!-- Header / Navbar Container -->
+    <header id="navbar-container" class="bg-coffee-dark/95 border-b border-coffee-lighter sticky top-0 z-40 backdrop-blur-sm">
+        <!-- Will be loaded dynamically from app.js -->
+    </header>
+
+    <!-- Admin Panel Body -->
+    <main class="flex-grow py-12 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto">
+            
+
+
+            <!-- SECTION 2: Admin Dashboard (Hidden by default) -->
+            <section id="admin-dashboard-sec" class="hidden space-y-8">
+                
+                <!-- Dashboard Header -->
+                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-coffee-lighter pb-6">
+                    <div>
+                        <h1 class="text-3xl font-bold text-white font-serif">Hệ Thống Quản Trị</h1>
+                        <p class="text-xs text-coffee-accent">Quản lý nội dung, kiểm tra đơn hàng và thiết kế bao bì</p>
+                    </div>
+                    <button onclick="handleUserLogout()" class="bg-coffee-light border border-coffee-lighter text-xs text-coffee-gold hover:bg-coffee hover:text-white px-4 py-2 rounded transition-all">
+                        Đăng xuất
+                    </button>
+                </div>
+
+                <!-- Stats summary cards -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="bg-coffee-light border border-coffee-lighter p-6 rounded-lg flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-coffee-accent uppercase font-bold">Tổng đơn hàng</p>
+                            <h3 id="stat-orders" class="text-3xl font-bold text-white mt-1">0</h3>
+                        </div>
+                        <div class="p-3 bg-forest/20 text-coffee-gold rounded">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="bg-coffee-light border border-coffee-lighter p-6 rounded-lg flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-coffee-accent uppercase font-bold">Yêu cầu bao bì</p>
+                            <h3 id="stat-designs" class="text-3xl font-bold text-white mt-1">0</h3>
+                        </div>
+                        <div class="p-3 bg-forest/20 text-coffee-gold rounded">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                            </svg>
+                        </div>
+                    </div>
+
+                    <div class="bg-coffee-light border border-coffee-lighter p-6 rounded-lg flex items-center justify-between">
+                        <div>
+                            <p class="text-xs text-coffee-accent uppercase font-bold">Sản phẩm hiện có</p>
+                            <h3 id="stat-products" class="text-3xl font-bold text-white mt-1">0</h3>
+                        </div>
+                        <div class="p-3 bg-forest/20 text-coffee-gold rounded">
+                            <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+                            </svg>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Tabs and tables -->
+                <div class="bg-coffee-light border border-coffee-lighter rounded-lg overflow-hidden">
+                    <!-- Tab Header Links -->
+                    <div class="flex border-b border-coffee-lighter bg-coffee-dark/50 overflow-x-auto whitespace-nowrap scrollbar-none">
+                        <button onclick="switchTab('orders')" id="tab-btn-orders" class="px-6 py-4 text-xs font-semibold text-coffee-gold border-b-2 border-coffee-gold focus:outline-none uppercase flex-shrink-0">Đơn hàng</button>
+                        <button onclick="switchTab('designs')" id="tab-btn-designs" class="px-6 py-4 text-xs font-semibold text-coffee-accent hover:text-white focus:outline-none uppercase flex-shrink-0">Yêu cầu Bao Bì</button>
+                        <button onclick="switchTab('products')" id="tab-btn-products" class="px-6 py-4 text-xs font-semibold text-coffee-accent hover:text-white focus:outline-none uppercase flex-shrink-0">Sản phẩm</button>
+                        <button onclick="switchTab('blogs')" id="tab-btn-blogs" class="px-6 py-4 text-xs font-semibold text-coffee-accent hover:text-white focus:outline-none uppercase flex-shrink-0">Tin Tức</button>
+                        <button onclick="switchTab('settings')" id="tab-btn-settings" class="px-6 py-4 text-xs font-semibold text-coffee-accent hover:text-white focus:outline-none uppercase flex-shrink-0">Cấu hình Web</button>
+                    </div>
+
+                    <!-- Tab Content Panel -->
+                    <div class="p-6">
+                        
+                        <!-- TAB: Orders -->
+                        <div id="tab-panel-orders" class="space-y-4">
+                            <h3 class="font-serif text-lg font-bold text-white mb-4">Danh sách Đơn hàng</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-coffee-lighter">
+                                    <thead class="bg-coffee-dark/40">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-bold text-coffee-gold uppercase">Mã đơn</th>
+                                            <th class="px-6 py-3 text-left text-xs font-bold text-coffee-gold uppercase">Khách hàng</th>
+                                            <th class="px-6 py-3 text-left text-xs font-bold text-coffee-gold uppercase">Địa chỉ giao hàng</th>
+                                            <th class="px-6 py-3 text-left text-xs font-bold text-coffee-gold uppercase">Tổng tiền</th>
+                                            <th class="px-6 py-3 text-left text-xs font-bold text-coffee-gold uppercase">Ngày đặt</th>
+                                            <th class="px-6 py-3 text-left text-xs font-bold text-coffee-gold uppercase">Trạng thái</th>
+                                            <th class="px-6 py-3 text-right text-xs font-bold text-coffee-gold uppercase">Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-orders-table" class="divide-y divide-coffee-lighter/40">
+                                        <!-- Will load dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- TAB: Designs -->
+                        <div id="tab-panel-designs" class="hidden space-y-4">
+                            <h3 class="font-serif text-lg font-bold text-white mb-4">Yêu cầu Cá nhân hóa bao bì</h3>
+                            <div class="overflow-x-auto">
+                                <table class="min-w-full divide-y divide-coffee-lighter">
+                                    <thead class="bg-coffee-dark/40">
+                                        <tr>
+                                            <th class="px-6 py-3 text-left text-xs font-bold text-coffee-gold uppercase">Mã yêu cầu</th>
+                                            <th class="px-6 py-3 text-left text-xs font-bold text-coffee-gold uppercase">Khách hàng</th>
+                                            <th class="px-6 py-3 text-left text-xs font-bold text-coffee-gold uppercase">Ý tưởng thiết kế</th>
+                                            <th class="px-6 py-3 text-left text-xs font-bold text-coffee-gold uppercase">File nhãn dán</th>
+                                            <th class="px-6 py-3 text-left text-xs font-bold text-coffee-gold uppercase">Ngày gửi</th>
+                                            <th class="px-6 py-3 text-left text-xs font-bold text-coffee-gold uppercase">Trạng thái</th>
+                                            <th class="px-6 py-3 text-right text-xs font-bold text-coffee-gold uppercase">Thao tác</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="admin-designs-table" class="divide-y divide-coffee-lighter/40">
+                                        <!-- Will load dynamically -->
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <!-- TAB: Products -->
+                        <div id="tab-panel-products" class="hidden space-y-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-serif text-lg font-bold text-white">Quản lý Sản phẩm</h3>
+                                <button onclick="showAddProductModal()" class="bg-forest hover:bg-forest-hover text-white text-xs font-bold px-4 py-2 rounded transition-all">
+                                    + THÊM SẢN PHẨM MỚI
+                                </button>
+                            </div>
+                            <div id="admin-products-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- TAB: Blogs -->
+                        <div id="tab-panel-blogs" class="hidden space-y-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <h3 class="font-serif text-lg font-bold text-white">Quản lý Bài viết Tin tức</h3>
+                                <button onclick="showAddBlogModal()" class="bg-forest hover:bg-forest-hover text-white text-xs font-bold px-4 py-2 rounded transition-all">
+                                    + VIẾT BÀI MỚI
+                                </button>
+                            </div>
+                            <div id="admin-blogs-list" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- Loaded dynamically -->
+                            </div>
+                        </div>
+
+                        <!-- TAB: Settings -->
+                        <div id="tab-panel-settings" class="hidden space-y-6">
+                            <h3 class="font-serif text-lg font-bold text-white mb-4">Cấu hình Hệ thống & SEO</h3>
+                            
+                            <form onsubmit="handleSaveSettings(event)" class="max-w-2xl space-y-4">
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="set-seo-title" class="block text-xs font-semibold text-coffee-accent uppercase mb-2">Tiêu đề SEO Trang web</label>
+                                        <input type="text" id="set-seo-title" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                                    </div>
+                                    <div>
+                                        <label for="set-phone" class="block text-xs font-semibold text-coffee-accent uppercase mb-2">Số điện thoại Hotline</label>
+                                        <input type="text" id="set-phone" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                                    </div>
+                                </div>
+                                <div>
+                                    <label for="set-seo-desc" class="block text-xs font-semibold text-coffee-accent uppercase mb-2">Mô tả SEO (Meta Description)</label>
+                                    <textarea id="set-seo-desc" rows="3" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold"></textarea>
+                                </div>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                    <div>
+                                        <label for="set-email" class="block text-xs font-semibold text-coffee-accent uppercase mb-2">Email hỗ trợ</label>
+                                        <input type="email" id="set-email" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                                    </div>
+                                    <div>
+                                        <label for="set-address" class="block text-xs font-semibold text-coffee-accent uppercase mb-2">Địa chỉ văn phòng</label>
+                                        <input type="text" id="set-address" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                                    </div>
+                                </div>
+                                <button type="submit" class="bg-forest hover:bg-forest-hover text-white text-xs font-bold px-6 py-2.5 rounded transition-all">
+                                    LƯU THAY ĐỔI
+                                </button>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+            </section>
+
+        </div>
+    </main>
+
+    <!-- MODAL: Product Add/Edit Form -->
+    <div id="prod-modal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-coffee-light border border-coffee-lighter w-full max-w-lg rounded-lg overflow-hidden shadow-2xl">
+            <div class="p-6 border-b border-coffee-lighter bg-coffee flex justify-between items-center">
+                <h3 id="prod-modal-title" class="font-serif text-lg font-bold text-coffee-gold">Thêm Sản Phẩm</h3>
+                <button onclick="hideProductModal()" class="text-coffee-accent hover:text-white">&times;</button>
+            </div>
+            
+            <form id="prod-form" onsubmit="handleSaveProduct(event)" class="p-6 space-y-4">
+                <div>
+                    <label for="prod-name" class="block text-xs font-semibold text-coffee-accent mb-2">Tên sản phẩm *</label>
+                    <input type="text" id="prod-name" required class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                </div>
+                <div class="grid grid-cols-2 gap-4">
+                    <div>
+                        <label for="prod-price" class="block text-xs font-semibold text-coffee-accent mb-2">Giá bán (VNĐ) *</label>
+                        <input type="number" id="prod-price" required class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                    </div>
+                    <div>
+                        <label for="prod-unit" class="block text-xs font-semibold text-coffee-accent mb-2">Quy cách (đơn vị) *</label>
+                        <input type="text" id="prod-unit" required placeholder="Ví dụ: 250g, 500g" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                    </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="prod-img-file" class="block text-xs font-semibold text-coffee-accent mb-2">Chọn ảnh sản phẩm từ thiết bị</label>
+                        <input type="file" id="prod-img-file" accept="image/*" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-1.5 text-xs text-coffee-accent file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-bold file:bg-coffee-gold file:text-coffee-dark hover:file:bg-white cursor-pointer focus:outline-none focus:border-coffee-gold">
+                    </div>
+                    <div>
+                        <label for="prod-img" class="block text-xs font-semibold text-coffee-accent mb-2">Hoặc dùng đường dẫn ảnh URL</label>
+                        <input type="text" id="prod-img" placeholder="images/robusta.jpg" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                    </div>
+                </div>
+                <div>
+                    <label for="prod-roast" class="block text-xs font-semibold text-coffee-accent mb-2">Tùy chọn rang (ngăn cách bằng dấu phẩy)</label>
+                    <input type="text" id="prod-roast" placeholder="Light, Medium, Dark" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                </div>
+                <div>
+                    <label for="prod-desc" class="block text-xs font-semibold text-coffee-accent mb-2">Mô tả ngắn sản phẩm</label>
+                    <textarea id="prod-desc" rows="3" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="hideProductModal()" class="border border-coffee-lighter text-coffee-accent px-4 py-2 rounded text-xs">Hủy</button>
+                    <button type="submit" class="bg-forest hover:bg-forest-hover text-white px-6 py-2 rounded text-xs font-bold">LƯU SẢN PHẨM</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Blog Add/Edit Form -->
+    <div id="blog-modal" class="fixed inset-0 bg-black/75 z-50 flex items-center justify-center p-4 hidden">
+        <div class="bg-coffee-light border border-coffee-lighter w-full max-w-lg rounded-lg overflow-hidden shadow-2xl">
+            <div class="p-6 border-b border-coffee-lighter bg-coffee flex justify-between items-center">
+                <h3 id="blog-modal-title" class="font-serif text-lg font-bold text-coffee-gold">Viết Bài Viết Mới</h3>
+                <button onclick="hideBlogModal()" class="text-coffee-accent hover:text-white">&times;</button>
+            </div>
+            
+            <form id="blog-form" onsubmit="handleSaveBlog(event)" class="p-6 space-y-4">
+                <div>
+                    <label for="blog-title" class="block text-xs font-semibold text-coffee-accent mb-2">Tiêu đề bài viết *</label>
+                    <input type="text" id="blog-title" required class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                        <label for="blog-img-file" class="block text-xs font-semibold text-coffee-accent mb-2">Chọn ảnh đại diện từ thiết bị</label>
+                        <input type="file" id="blog-img-file" accept="image/*" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-1.5 text-xs text-coffee-accent file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-bold file:bg-coffee-gold file:text-coffee-dark hover:file:bg-white cursor-pointer focus:outline-none focus:border-coffee-gold">
+                    </div>
+                    <div>
+                        <label for="blog-img" class="block text-xs font-semibold text-coffee-accent mb-2">Hoặc dùng đường dẫn ảnh URL</label>
+                        <input type="text" id="blog-img" placeholder="images/blog1.jpg" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                    </div>
+                </div>
+                <div class="flex items-center space-x-2 py-1">
+                    <input type="checkbox" id="blog-is-video" onchange="toggleVideoUrlField()" class="bg-coffee border-coffee-lighter rounded">
+                    <label for="blog-is-video" class="text-xs font-semibold text-coffee-accent">Bài viết có chứa Video?</label>
+                </div>
+                <div id="blog-video-url-sec" class="hidden">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label for="blog-video-file" class="block text-xs font-semibold text-coffee-accent mb-2">Chọn file Video từ thiết bị</label>
+                            <input type="file" id="blog-video-file" accept="video/*" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-1.5 text-xs text-coffee-accent file:mr-3 file:py-1 file:px-2.5 file:rounded file:border-0 file:text-xs file:font-bold file:bg-coffee-gold file:text-coffee-dark hover:file:bg-white cursor-pointer focus:outline-none focus:border-coffee-gold">
+                        </div>
+                        <div>
+                            <label for="blog-video-url" class="block text-xs font-semibold text-coffee-accent mb-2">Hoặc đường dẫn URL / YouTube</label>
+                            <input type="text" id="blog-video-url" placeholder="https://www.youtube.com/embed/..." class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <label for="blog-summary" class="block text-xs font-semibold text-coffee-accent mb-2">Tóm tắt ngắn *</label>
+                    <input type="text" id="blog-summary" required class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                </div>
+                <div>
+                    <label for="blog-content" class="block text-xs font-semibold text-coffee-accent mb-2">Nội dung chi tiết</label>
+                    <textarea id="blog-content" rows="4" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2 text-sm text-white focus:outline-none focus:border-coffee-gold"></textarea>
+                </div>
+                <div class="flex justify-end space-x-2 pt-2">
+                    <button type="button" onclick="hideBlogModal()" class="border border-coffee-lighter text-coffee-accent px-4 py-2 rounded text-xs">Hủy</button>
+                    <button type="submit" class="bg-forest hover:bg-forest-hover text-white px-6 py-2 rounded text-xs font-bold">LƯU BÀI VIẾT</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer Container -->
+    <footer id="footer-container" class="bg-coffee-dark border-t border-coffee-lighter text-coffee-accent">
+        <!-- Will be loaded dynamically from app.js -->
+    </footer>
+
+    <!-- MODAL: Image Preview -->
+    <div id="image-preview-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden" onclick="closeImagePreviewModal()">
+        <div class="relative max-w-4xl max-h-[85vh] bg-[#533E2D] border border-[#7A6452] p-2 rounded-lg shadow-2xl overflow-hidden flex flex-col items-center" onclick="event.stopPropagation()">
+            <button onclick="closeImagePreviewModal()" class="absolute top-2 right-2 text-white bg-black/60 hover:bg-black/80 w-8 h-8 rounded-full flex items-center justify-center text-xl font-bold transition-all z-10">&times;</button>
+            <img id="preview-modal-img" src="" class="max-w-full max-h-[70vh] object-contain rounded">
+            <div class="p-3 text-center flex justify-between items-center bg-coffee-dark/80 mt-2 rounded w-full">
+                <span id="preview-modal-filename" class="text-xs text-coffee-accent truncate max-w-xs sm:max-w-md"></span>
+                <button id="preview-modal-download-btn" class="bg-forest hover:bg-forest-hover text-white text-xs font-bold px-3 py-1.5 rounded transition-all">
+                    TẢI XUỐNG
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Shopping Cart Slide-out Drawer Container -->
+    <div id="cart-drawer-container"></div>
+
+    <!-- Core App JS -->
+    <script src="js/app.js"></script>
+
+    <!-- Tab Switching script -->
+    <script>
+        function switchTab(tabName) {
+            // Hide all tab panels
+            document.getElementById('tab-panel-orders').classList.add('hidden');
+            document.getElementById('tab-panel-designs').classList.add('hidden');
+            document.getElementById('tab-panel-products').classList.add('hidden');
+            document.getElementById('tab-panel-blogs').classList.add('hidden');
+            document.getElementById('tab-panel-settings').classList.add('hidden');
+            
+            // Deactivate all tab buttons
+            const tabs = ['orders', 'designs', 'products', 'blogs', 'settings'];
+            tabs.forEach(t => {
+                const btn = document.getElementById('tab-btn-' + t);
+                btn.classList.remove('text-coffee-gold', 'border-b-2', 'border-coffee-gold');
+                btn.classList.add('text-coffee-accent', 'hover:text-white');
+            });
+            
+            // Show active panel
+            document.getElementById('tab-panel-' + tabName).classList.remove('hidden');
+            
+            // Activate button
+            const activeBtn = document.getElementById('tab-btn-' + tabName);
+            activeBtn.classList.remove('text-coffee-accent', 'hover:text-white');
+            activeBtn.classList.add('text-coffee-gold', 'border-b-2', 'border-coffee-gold');
+        }
+    </script>
+</body>
+</html>

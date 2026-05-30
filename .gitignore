@@ -1,0 +1,19 @@
+# Node.js
+node_modules/
+backend/node_modules/
+backend/.env
+.env
+
+# .NET / C#
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDEs
+.vs/
+.idea/
+*.swp
+.DS_Store

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi Tiết Sản Phẩm – Pureva Craft</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        coffee: {
+                            DEFAULT: '#634A36',
+                            light: '#533E2D',
+                            lighter: '#7A6452',
+                            accent: '#F4E8D7',
+                            gold: '#E0C294',
+                            dark: '#634A36',
+                        },
+                        forest: {
+                            DEFAULT: '#314F22',
+                            hover: '#253B1A',
+                            light: '#3C612B',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #634A36;
+            color: #F4E8D7;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-coffee-dark">
+
+    <!-- Header / Navbar Container -->
+    <header id="navbar-container" class="bg-coffee-dark/95 border-b border-coffee-lighter sticky top-0 z-40 backdrop-blur-sm">
+        <!-- Will be loaded dynamically from app.js -->
+    </header>
+
+    <!-- Main Detail Section -->
+    <main class="flex-grow py-12 md:py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Breadcrumbs -->
+            <div class="flex items-center space-x-2 text-xs text-coffee-accent/70 mb-8 font-sans">
+                <a href="index.html" class="hover:text-coffee-gold transition-colors">Trang chủ</a>
+                <span>/</span>
+                <a href="shop.html" class="hover:text-coffee-gold transition-colors">Cửa hàng</a>
+                <span>/</span>
+                <span id="breadcrumb-name" class="text-coffee-gold font-medium">Chi tiết sản phẩm</span>
+            </div>
+
+            <!-- Product Detail Container -->
+            <div id="product-detail-content" class="min-h-[400px] flex items-center justify-center">
+                <!-- Loading indicator -->
+                <div class="flex flex-col items-center space-y-3">
+                    <svg class="animate-spin h-8 w-8 text-coffee-gold" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span class="text-sm text-coffee-accent">Đang tải chi tiết sản phẩm...</span>
+                </div>
+            </div>
+
+            <!-- Recommended Brewing Guide Section (Will be populated dynamically) -->
+            <div id="brewing-guide-section" class="hidden mt-16 pt-16 border-t border-coffee-lighter/40">
+                <!-- Brewing Guide Content -->
+            </div>
+
+            <!-- Related Products Section (Will be populated dynamically) -->
+            <div id="related-products-section" class="hidden mt-16 pt-16 border-t border-coffee-lighter/40">
+                <!-- Related Products Content -->
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Container -->
+    <footer id="footer-container" class="bg-coffee-dark border-t border-coffee-lighter text-coffee-accent">
+        <!-- Will be loaded dynamically from app.js -->
+    </footer>
+
+    <!-- Shopping Cart Slide-out Drawer Container -->
+    <div id="cart-drawer-container"></div>
+
+    <!-- Core App JS -->
+    <script src="js/app.js"></script>
+</body>
+</html>

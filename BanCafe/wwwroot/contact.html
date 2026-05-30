@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liên Hệ Với Chúng Tôi – Pureva Craft</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        coffee: {
+                            DEFAULT: '#634A36',
+                            light: '#533E2D',
+                            lighter: '#7A6452',
+                            accent: '#F4E8D7',
+                            gold: '#E0C294',
+                            dark: '#634A36',
+                        },
+                        forest: {
+                            DEFAULT: '#314F22',
+                            hover: '#253B1A',
+                            light: '#3C612B',
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+        
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #634A36;
+            color: #F4E8D7;
+        }
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen bg-coffee-dark">
+
+    <!-- Header / Navbar Container -->
+    <header id="navbar-container" class="bg-coffee-dark/95 border-b border-coffee-lighter sticky top-0 z-40 backdrop-blur-sm">
+        <!-- Will be loaded dynamically from app.js -->
+    </header>
+
+    <!-- Page Title Header -->
+    <section class="relative py-16 bg-coffee bg-cover bg-center border-b border-coffee-lighter" style="background-image: url('https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=2070&auto=format&fit=crop');">
+        <div class="absolute inset-0 bg-black/75"></div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-3">
+            <h1 class="text-3xl sm:text-4xl font-bold text-white">Liên Hệ Pureva Coffee</h1>
+            <p class="text-sm text-coffee-accent max-w-md mx-auto">Kết nối với chúng tôi để chia sẻ niềm đam mê cà phê mộc sạch tinh khiết.</p>
+        </div>
+    </section>
+
+    <!-- Content Section -->
+    <main class="flex-grow py-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+                
+                <!-- Contact info panel -->
+                <div class="space-y-8">
+                    <div class="space-y-4">
+                        <span class="text-coffee-gold font-semibold tracking-wider text-xs uppercase">LIÊN HỆ TRỰC TIẾP</span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white">Hãy ghé thăm hoặc trò chuyện cùng chúng tôi</h2>
+                        <p class="text-sm text-coffee-accent leading-relaxed text-justify">
+                            Nếu bạn muốn hợp tác nhập sỉ cà phê hạt chất lượng cao, đăng ký tham quan nông trại canh tác hữu cơ tại Lâm Đồng, hoặc đơn giản là muốn chia sẻ trải nghiệm về Pureva, vui lòng gửi tin nhắn hoặc gọi trực tiếp cho chúng tôi.
+                        </p>
+                    </div>
+
+                    <div class="space-y-6">
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 bg-forest/20 text-coffee-gold p-3 rounded-lg">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-serif text-base font-bold text-white">Văn phòng & Nông trại</h4>
+                                <p id="contact-address" class="text-xs text-coffee-accent mt-1 leading-relaxed">Dốc Di Linh, Huyện Di Linh, Tỉnh Lâm Đồng, Việt Nam</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 bg-forest/20 text-coffee-gold p-3 rounded-lg">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.94.725l.548 2.2a1 1 0 01-.321.988l-1.305.98a10.582 10.582 0 004.872 4.872l.98-1.305a1 1 0 01.988-.321l2.2.548a1 1 0 01.725.94V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-serif text-base font-bold text-white">Điện thoại Hotline</h4>
+                                <p id="contact-phone" class="text-xs text-coffee-accent mt-1 leading-relaxed">0901 234 567</p>
+                            </div>
+                        </div>
+                        <div class="flex items-start space-x-4">
+                            <div class="flex-shrink-0 bg-forest/20 text-coffee-gold p-3 rounded-lg">
+                                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                                </svg>
+                            </div>
+                            <div>
+                                <h4 class="font-serif text-base font-bold text-white">Email hỗ trợ</h4>
+                                <p id="contact-email" class="text-xs text-coffee-accent mt-1 leading-relaxed">contact@purevacraft.vn</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Contact Message Form -->
+                <div class="bg-coffee-light border border-coffee-lighter p-8 rounded-lg shadow-xl">
+                    <h3 class="font-serif text-xl font-bold text-white mb-6 text-center">Gửi tin nhắn phản hồi</h3>
+                    
+                    <form id="contact-form" onsubmit="handleContactSubmit(event)" class="space-y-5">
+                        <div>
+                            <label for="cont-name" class="block text-xs font-semibold text-coffee-accent uppercase mb-2">Họ và tên *</label>
+                            <input type="text" id="cont-name" required placeholder="Nhập tên của bạn" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2.5 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                        </div>
+                        
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <div>
+                                <label for="cont-email" class="block text-xs font-semibold text-coffee-accent uppercase mb-2">Email *</label>
+                                <input type="email" id="cont-email" required placeholder="Nhập email" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2.5 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                            </div>
+                            <div>
+                                <label for="cont-phone" class="block text-xs font-semibold text-coffee-accent uppercase mb-2">Số điện thoại *</label>
+                                <input type="tel" id="cont-phone" required placeholder="Nhập số điện thoại" class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2.5 text-sm text-white focus:outline-none focus:border-coffee-gold">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label for="cont-message" class="block text-xs font-semibold text-coffee-accent uppercase mb-2">Lời nhắn của bạn *</label>
+                            <textarea id="cont-message" required rows="5" placeholder="Viết lời nhắn gửi đến Pureva Coffee..." class="w-full bg-coffee border border-coffee-lighter rounded px-3 py-2.5 text-sm text-white focus:outline-none focus:border-coffee-gold"></textarea>
+                        </div>
+
+                        <button type="submit" class="w-full bg-forest hover:bg-forest-hover text-white font-bold py-3 px-4 rounded transition-all duration-300 tracking-wider uppercase text-sm">
+                            GỬI TIN NHẮN LIÊN HỆ
+                        </button>
+                    </form>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer Container -->
+    <footer id="footer-container" class="bg-coffee-dark border-t border-coffee-lighter text-coffee-accent">
+        <!-- Will be loaded dynamically from app.js -->
+    </footer>
+
+    <!-- Shopping Cart Slide-out Drawer Container -->
+    <div id="cart-drawer-container"></div>
+
+    <!-- Core App JS -->
+    <script src="js/app.js"></script>
+
+    <!-- Submit Handler -->
+    <script>
+        function handleContactSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('cont-name').value;
+            const email = document.getElementById('cont-email').value;
+            const phone = document.getElementById('cont-phone').value;
+            const msg = document.getElementById('cont-message').value;
+            
+            // Post message to C# backend
+            sendHostMessage({
+                action: 'submitContact',
+                customerName: name,
+                customerEmail: email,
+                customerPhone: phone,
+                message: msg
+            });
+            // Alert user immediately via custom toast
+            const alertMsg = (localStorage.getItem('pureva_lang') || 'VI') === 'EN'
+                ? "Thank you for contacting us! Pureva will reach out to you as soon as possible."
+                : "Cảm ơn bạn đã gửi liên hệ! Pureva sẽ liên hệ lại với bạn trong thời gian sớm nhất.";
+            showToast(alertMsg, "success");
+            document.getElementById('contact-form').reset();
+        }
+    </script>
+</body>
+</html>
