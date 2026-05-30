@@ -398,7 +398,7 @@ async function handleBrowserFetch(msg) {
                 const res = await fetch(`${API_BASE_URL}/admin/login`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: msg.email, password: msg.password })
+                    body: JSON.stringify({ email: msg.username || msg.email, password: msg.password })
                 });
                 const data = await res.json();
                 handleHostMessage({ action: 'adminLoginResponse', success: data.success });
@@ -548,7 +548,15 @@ async function handleBrowserFetch(msg) {
                 const res = await fetch(`${API_BASE_URL}/admin/settings/save`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ settings: msg.settings })
+                    body: JSON.stringify({
+                        settings: {
+                            SeoTitle: msg.seoTitle,
+                            SeoDescription: msg.seoDescription,
+                            ContactPhone: msg.phone,
+                            ContactEmail: msg.email,
+                            ContactAddress: msg.address
+                        }
+                    })
                 });
                 const data = await res.json();
                 handleHostMessage({ action: 'crudResponse', success: data.success, message: data.message });
@@ -1190,11 +1198,12 @@ function renderAdminDashboard(data) {
     }
     
     // Render settings
-    const seoTitle = data.settings.find(s => s.SettingKey === 'SeoTitle')?.SettingValue || '';
-    const seoDesc = data.settings.find(s => s.SettingKey === 'SeoDescription')?.SettingValue || '';
-    const phone = data.settings.find(s => s.SettingKey === 'ContactPhone')?.SettingValue || '';
-    const email = data.settings.find(s => s.SettingKey === 'ContactEmail')?.SettingValue || '';
-    const address = data.settings.find(s => s.SettingKey === 'ContactAddress')?.SettingValue || '';
+    const settingsList = data.settings || [];
+    const seoTitle = settingsList.find(s => s.SettingKey === 'SeoTitle')?.SettingValue || '';
+    const seoDesc = settingsList.find(s => s.SettingKey === 'SeoDescription')?.SettingValue || '';
+    const phone = settingsList.find(s => s.SettingKey === 'ContactPhone')?.SettingValue || '';
+    const email = settingsList.find(s => s.SettingKey === 'ContactEmail')?.SettingValue || '';
+    const address = settingsList.find(s => s.SettingKey === 'ContactAddress')?.SettingValue || '';
     
     const titleIn = document.getElementById('set-seo-title');
     if (titleIn) titleIn.value = seoTitle;

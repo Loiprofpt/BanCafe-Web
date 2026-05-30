@@ -199,12 +199,21 @@ app.get('/api/admin/data', async (req, res) => {
       IsActive: row.isactive
     }));
 
+    // 6. Get Settings
+    const settingsRes = await pool.query('SELECT settingkey, settingvalue, description FROM settings');
+    const settings = settingsRes.rows.map(row => ({
+      SettingKey: row.settingkey,
+      SettingValue: row.settingvalue,
+      Description: row.description
+    }));
+
     res.json({
       orders,
       orderItems,
       designs,
       products,
-      blogs
+      blogs,
+      settings
     });
   } catch (err) {
     console.error(err);
