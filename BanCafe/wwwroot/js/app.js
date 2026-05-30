@@ -430,9 +430,9 @@ async function handleBrowserFetch(msg) {
                         customerPhone: msg.customerPhone,
                         customerEmail: msg.customerEmail,
                         description: msg.description,
-                        designFileUrl: msg.designFileUrl,
-                        designFileName: msg.designFileName,
-                        designFileBase64: msg.designFileBase64
+                        designFileUrl: msg.designFileUrl || '',
+                        designFileName: msg.designFileName || msg.fileName,
+                        designFileBase64: msg.designFileBase64 || msg.fileBase64
                     })
                 });
                 const data = await res.json();
