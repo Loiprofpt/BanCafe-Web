@@ -475,14 +475,27 @@ namespace BanCafe
             {
                 int id = msg["id"]?.ToObject<int>() ?? 0;
 
-                string query = "DELETE FROM [dbo].[Products] WHERE Id = @Id";
-                SqlParameter[] parameters = new SqlParameter[]
-                {
+                // Check if product has orders
+                object countObj = DatabaseHelper.ExecuteScalar(
+                    "SELECT COUNT(*) FROM [dbo].[OrderItems] WHERE ProductId = @Id",
                     new SqlParameter("@Id", id)
-                };
+                );
+                int count = Convert.ToInt32(countObj);
 
-                DatabaseHelper.ExecuteNonQuery(query, parameters);
-                SendJsonMessage(new { action = "crudResponse", success = true });
+                if (count > 0)
+                {
+                    // Soft delete
+                    string query = "UPDATE [dbo].[Products] SET IsActive = 0 WHERE Id = @Id";
+                    DatabaseHelper.ExecuteNonQuery(query, new SqlParameter("@Id", id));
+                    SendJsonMessage(new { action = "crudResponse", success = true, message = "Sản phẩm đã có đơn hàng nên hệ thống chuyển thành ngưng hoạt động (Ẩn khỏi cửa hàng)." });
+                }
+                else
+                {
+                    // Hard delete
+                    string query = "DELETE FROM [dbo].[Products] WHERE Id = @Id";
+                    DatabaseHelper.ExecuteNonQuery(query, new SqlParameter("@Id", id));
+                    SendJsonMessage(new { action = "crudResponse", success = true });
+                }
             }
             catch (Exception ex)
             {

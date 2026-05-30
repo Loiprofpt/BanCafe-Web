@@ -373,8 +373,19 @@ app.post('/api/admin/products/save', async (req, res) => {
 app.post('/api/admin/products/delete', async (req, res) => {
   const { id } = req.body;
   try {
-    await pool.query('DELETE FROM products WHERE id = $1', [id]);
-    res.json({ success: true });
+    // Check if product has orders
+    const checkRes = await pool.query('SELECT COUNT(*) FROM orderitems WHERE productid = $1', [id]);
+    const hasOrders = parseInt(checkRes.rows[0].count, 10) > 0;
+    
+    if (hasOrders) {
+      // Soft delete: deactivate the product
+      await pool.query('UPDATE products SET isactive = false WHERE id = $1', [id]);
+      res.json({ success: true, message: 'Sản phẩm đã có đơn hàng nên hệ thống chuyển thành ngưng hoạt động (Ẩn khỏi cửa hàng).' });
+    } else {
+      // Hard delete: remove completely
+      await pool.query('DELETE FROM products WHERE id = $1', [id]);
+      res.json({ success: true });
+    }
   } catch (err) {
     console.error(err);
     res.status(500).json({ success: false, message: err.message });
