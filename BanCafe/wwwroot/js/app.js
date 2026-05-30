@@ -8,7 +8,7 @@ let websiteSettings = null;
 // Backend API URL (for standard web browsers)
 const API_BASE_URL = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname.endsWith('.test')
     ? 'http://localhost:5000/api'
-    : 'https://your-backend-api.onrender.com/api'; // Thay thế bằng địa chỉ backend đã deploy của bạn
+    : 'https://bancafe-api.onrender.com/api';
 
 const langMap = {
     VI: {
