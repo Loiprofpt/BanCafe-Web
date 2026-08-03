@@ -87,6 +87,12 @@ document.addEventListener('DOMContentLoaded', () => {
     // Request initial page-specific data
     requestPageData();
     
+    // Check and record website visit
+    if (!sessionStorage.getItem('bancafe_visited')) {
+        sessionStorage.setItem('bancafe_visited', 'true');
+        fetch(API_BASE_URL + '/visit', { method: 'POST' }).catch(e => console.error(e));
+    }
+    
     // Check if redirect wants us to open auth modal
     const urlParams = new URLSearchParams(window.location.search);
     if (urlParams.get('openAuth') === 'login') {
@@ -1241,6 +1247,15 @@ function renderAdminDashboard(data) {
     // Stat summary
     document.getElementById('stat-orders').innerText = data.orders.length;
     document.getElementById('stat-designs').innerText = data.designs.length;
+    
+    // Visitor Count from settings
+    let visitCount = 0;
+    if (data.settings) {
+        const visitSetting = data.settings.find(s => s.SettingKey === 'VisitorCount');
+        if (visitSetting) visitCount = parseInt(visitSetting.SettingValue) || 0;
+    }
+    const statVisitsEl = document.getElementById('stat-visits');
+    if (statVisitsEl) statVisitsEl.innerText = visitCount;
     
     // Revenue & Customers
     let totalRevenue = 0;

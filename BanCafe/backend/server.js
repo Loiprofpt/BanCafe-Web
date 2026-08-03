@@ -134,6 +134,26 @@ app.get('/api/farm-videos', async (req, res) => {
   }
 });
 
+// Visitor Count
+app.post('/api/visit', async (req, res) => {
+  try {
+    const checkRes = await pool.query('SELECT settingvalue FROM settings WHERE settingkey = $1', ['VisitorCount']);
+    if (checkRes.rows.length > 0) {
+      const current = parseInt(checkRes.rows[0].settingvalue) || 0;
+      const newCount = current + 1;
+      await pool.query('UPDATE settings SET settingvalue = $1 WHERE settingkey = $2', [newCount.toString(), 'VisitorCount']);
+      res.json({ count: newCount });
+    } else {
+      // First time, start at 63 since we fake 62 beforehand
+      await pool.query('INSERT INTO settings (settingkey, settingvalue, description) VALUES ($1, $2, $3)', ['VisitorCount', '63', 'Tổng lượt truy cập website']);
+      res.json({ count: 63 });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
 // 4. Admin Authentication
 app.post('/api/admin/login', async (req, res) => {
   const { email, password } = req.body;
