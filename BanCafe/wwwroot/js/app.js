@@ -1329,10 +1329,13 @@ function renderAdminDashboard(data) {
     // Render orders
     const ordersTbl = document.getElementById('admin-orders-table');
     if (ordersTbl) {
-        if (data.orders.length === 0) {
+        // Filter out dummy orders from the "Orders" tab display
+        const displayOrders = data.orders.filter(o => o.TotalAmount !== '150000.00' && o.TotalAmount !== 150000);
+        
+        if (displayOrders.length === 0) {
             ordersTbl.innerHTML = `<tr><td colspan="7" class="px-6 py-4 text-center text-sm text-coffee-accent">${currentLang === 'EN' ? 'No orders found' : 'Chưa có đơn hàng nào'}</td></tr>`;
         } else {
-            ordersTbl.innerHTML = data.orders.map(o => {
+            ordersTbl.innerHTML = displayOrders.map(o => {
                 const date = new Date(o.CreatedAt).toLocaleString(currentLang === 'EN' ? 'en-US' : 'vi-VN');
                 return `
                     <tr class="border-b border-coffee-lighter/40 hover:bg-coffee/40">
