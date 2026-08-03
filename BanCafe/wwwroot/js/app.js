@@ -580,7 +580,15 @@ async function handleBrowserFetch(msg) {
                         vidFileBase64: msg.vidFileBase64
                     })
                 });
-                const data = await res.json();
+                
+                let data = null;
+                try {
+                    data = await res.json();
+                } catch (e) {
+                    const text = await res.text();
+                    data = { success: false, message: `Lỗi Server: ${res.status} - ${text.substring(0,100)}` };
+                }
+                
                 handleHostMessage({ action: 'crudResponse', success: data.success, message: data.message });
                 break;
             }
@@ -1815,6 +1823,8 @@ async function handleSaveFarmVideo(event) {
         }
     }
         
+    showToast(currentLang === 'EN' ? "Uploading video... Please wait, it may take a while." : "Đang tải video lên... Quá trình này có thể mất vài phút tuỳ theo dung lượng video, danh sách sẽ tự làm mới khi hoàn tất.", "success");
+    
     sendHostMessage({
         action: 'saveFarmVideo',
         id: editingFarmVideoId,
