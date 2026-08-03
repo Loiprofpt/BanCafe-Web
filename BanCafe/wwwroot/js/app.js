@@ -1233,7 +1233,7 @@ function renderAdminDashboard(data) {
                 const date = new Date(o.CreatedAt).toLocaleString(currentLang === 'EN' ? 'en-US' : 'vi-VN');
                 return `
                     <tr class="border-b border-coffee-lighter/40 hover:bg-coffee/40">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">#${o.Id}</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-white">#PV-${o.Id + 1000}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-coffee-accent">
                             <div class="font-bold text-white">${o.CustomerName}</div>
                             <div class="text-xs">${o.CustomerPhone} | ${o.CustomerEmail}</div>
@@ -1242,11 +1242,12 @@ function renderAdminDashboard(data) {
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-coffee-gold font-bold">${formatMoney(o.TotalAmount)}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-coffee-accent">${date}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
-                            <select onchange="updateOrderStatus(${o.Id}, this.value)" class="bg-coffee border border-coffee-lighter text-xs text-white rounded p-1">
-                                <option value="Pending" ${o.Status === 'Pending' ? 'selected' : ''}>${currentLang === 'EN' ? 'Pending' : 'Chờ duyệt'}</option>
+                            <select onchange="updateOrderStatus(${o.Id}, this.value)" class="bg-coffee border border-coffee-lighter text-xs rounded p-1 font-bold ${o.Status === 'Paid' ? 'text-green-400' : (o.Status === 'Pending' ? 'text-orange-400' : (o.Status === 'Cancelled' ? 'text-red-400' : 'text-white'))}">
+                                <option value="Pending" ${o.Status === 'Pending' ? 'selected' : ''}>${currentLang === 'EN' ? 'Pending Payment' : 'Chờ thanh toán'}</option>
+                                <option value="Paid" ${o.Status === 'Paid' ? 'selected' : ''}>${currentLang === 'EN' ? 'Paid' : 'Đã thanh toán'}</option>
                                 <option value="Shipping" ${o.Status === 'Shipping' ? 'selected' : ''}>${currentLang === 'EN' ? 'Shipping' : 'Đang giao'}</option>
                                 <option value="Delivered" ${o.Status === 'Delivered' ? 'selected' : ''}>${currentLang === 'EN' ? 'Delivered' : 'Đã giao'}</option>
-                                <option value="Cancelled" ${o.Status === 'Cancelled' ? 'selected' : ''}>${currentLang === 'EN' ? 'Cancelled' : 'Đã hủy'}</option>
+                                <option value="Cancelled" ${o.Status === 'Cancelled' ? 'selected' : ''}>${currentLang === 'EN' ? 'Cancelled' : 'Đã huỷ'}</option>
                             </select>
                         </td>
                         <td class="px-6 py-4 whitespace-nowrap text-right text-sm">
