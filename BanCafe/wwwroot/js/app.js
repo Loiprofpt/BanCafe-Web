@@ -1695,7 +1695,9 @@ async function handleSaveBlog(event) {
     const content = document.getElementById('blog-content').value;
     const img = document.getElementById('blog-img').value;
     const isVideo = document.getElementById('blog-is-video').checked;
-    const videoUrl = document.getElementById('blog-video-url').value;
+    let videoUrl = document.getElementById('blog-video-url').value;
+    
+    videoUrl = formatVideoUrl(videoUrl);
     
     // Auto-generate slug
     const slug = title.toLowerCase()
@@ -1794,7 +1796,9 @@ async function handleSaveFarmVideo(event) {
     const title = document.getElementById('farm-video-title').value;
     const desc = document.getElementById('farm-video-desc').value;
     const img = document.getElementById('farm-video-img').value;
-    const url = document.getElementById('farm-video-url').value;
+    let url = document.getElementById('farm-video-url').value;
+    
+    url = formatVideoUrl(url);
     
     let imgFileName = '';
     let imgFileBase64 = '';
@@ -3281,4 +3285,23 @@ function toggleMobileMenu(open) {
             drawer.classList.add('hidden');
         }, 300);
     }
+}
+
+// Helper to format video URL (Youtube/TikTok) to Embed URL
+function formatVideoUrl(url) {
+    if (!url) return url;
+    
+    // YouTube
+    const ytMatch = url.match(/(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/i);
+    if (ytMatch && ytMatch[1] && !url.includes('/embed/')) {
+        return 'https://www.youtube.com/embed/' + ytMatch[1];
+    }
+    
+    // TikTok
+    const tkMatch = url.match(/tiktok\.com\/@[^\/]+\/video\/(\d+)/i);
+    if (tkMatch && tkMatch[1]) {
+        return 'https://www.tiktok.com/embed/v2/' + tkMatch[1];
+    }
+    
+    return url;
 }
