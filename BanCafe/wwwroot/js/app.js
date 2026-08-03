@@ -932,10 +932,20 @@ function handleCheckout(event) {
     event.preventDefault();
     if (cart.length === 0) return showToast(currentLang === 'EN' ? "Your cart is empty!" : "Giỏ hàng của bạn đang trống!", "warning");
     
-    const name = document.getElementById('cust-name').value;
-    const phone = document.getElementById('cust-phone').value;
-    const email = document.getElementById('cust-email').value;
-    const address = document.getElementById('cust-address').value;
+    const name = document.getElementById('cust-name').value.trim();
+    const phone = document.getElementById('cust-phone').value.trim();
+    const email = document.getElementById('cust-email').value.trim();
+    const address = document.getElementById('cust-address').value.trim();
+    
+    const phoneRegex = /^0\d{9}$/;
+    if (!phoneRegex.test(phone)) {
+        return showToast(currentLang === 'EN' ? "Invalid phone number (must be 10 digits starting with 0)" : "Số điện thoại không hợp lệ (phải gồm 10 số và bắt đầu bằng số 0)", "warning");
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return showToast(currentLang === 'EN' ? "Invalid email format" : "Định dạng email không hợp lệ", "warning");
+    }
     
     // Save to sessionStorage before sending so it's ready upon success redirect
     sessionStorage.setItem('lastOrder', JSON.stringify({
@@ -1111,10 +1121,20 @@ function renderBlogPage() {
 function handleCustomizeSubmit(event) {
     event.preventDefault();
     
-    const name = document.getElementById('cust-name').value;
-    const email = document.getElementById('cust-email').value;
-    const phone = document.getElementById('cust-phone').value;
-    const desc = document.getElementById('cust-description').value;
+    const name = document.getElementById('cust-name').value.trim();
+    const email = document.getElementById('cust-email').value.trim();
+    const phone = document.getElementById('cust-phone').value.trim();
+    const desc = document.getElementById('cust-description').value.trim();
+    
+    const phoneRegex = /^0\d{9}$/;
+    if (!phoneRegex.test(phone)) {
+        return showToast(currentLang === 'EN' ? "Invalid phone number (must be 10 digits starting with 0)" : "Số điện thoại không hợp lệ (phải gồm 10 số và bắt đầu bằng số 0)", "warning");
+    }
+    
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        return showToast(currentLang === 'EN' ? "Invalid email format" : "Định dạng email không hợp lệ", "warning");
+    }
     const fileInput = document.getElementById('cust-file');
     
     let fileName = "";
