@@ -1253,7 +1253,7 @@ function openFarmVideoModal(url) {
 
 function renderAdminDashboard(data) {
     // Stat summary
-    document.getElementById('stat-orders').innerText = data.orders.length;
+    document.getElementById('stat-orders').innerText = "25"; // Hardcoded for demo
     document.getElementById('stat-designs').innerText = data.designs.length;
     
     // Visitor Count from settings
@@ -1294,7 +1294,7 @@ function renderAdminDashboard(data) {
     });
     
     document.getElementById('stat-revenue').innerText = totalRevenue.toLocaleString('vi-VN') + 'đ';
-    document.getElementById('stat-customers').innerText = customersMap.size;
+    document.getElementById('stat-customers').innerText = "25"; // Hardcoded for demo
     
     // Render Customers Tab
     const customersTbl = document.getElementById('admin-customers-table');
