@@ -5,6 +5,7 @@ DROP TABLE IF EXISTS products CASCADE;
 DROP TABLE IF EXISTS customdesigns CASCADE;
 DROP TABLE IF EXISTS blogs CASCADE;
 DROP TABLE IF EXISTS settings CASCADE;
+DROP TABLE IF EXISTS farm_videos CASCADE;
 
 -- 2. Tạo bảng Sản phẩm (products)
 CREATE TABLE products (
@@ -73,6 +74,17 @@ CREATE TABLE settings (
     description VARCHAR(250)
 );
 
+-- 8. Tạo bảng Video Nông trại (farm_videos)
+CREATE TABLE farm_videos (
+    id SERIAL PRIMARY KEY,
+    title VARCHAR(200) NOT NULL,
+    description TEXT,
+    videourl VARCHAR(255) NOT NULL,
+    thumbnailurl VARCHAR(255),
+    createdat TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    isactive BOOLEAN NOT NULL DEFAULT TRUE
+);
+
 -- ==========================================
 -- CHÈN DỮ LIỆU MẪU BAN ĐẦU (SEED DATA)
 -- ==========================================
@@ -99,3 +111,8 @@ INSERT INTO blogs (title, slug, summary, content, imageurl, isvideo, videourl, i
 ('Hành trình từ nông trại hữu cơ đến ly cà phê đặc sản', 'hanh-trinh-ca-phe-huu-co', 'Khám phá quy trình trồng trọt khép kín không hóa chất của Pureva tại vùng cao Lâm Đồng, mang lại hạt cà phê tinh khiết nhất.', 'Tại nông trại Pureva Coffee ở Lâm Đồng, chúng tôi bắt đầu từ việc chọn giống tốt nhất, nuôi dưỡng đất bằng phân hữu cơ sinh học, và tưới nguồn nước suối trong lành tự nhiên. Từng hạt cà phê chín đỏ mọng được thu hái thủ công 100% để đảm bảo độ đồng đều cao nhất. Tiếp đến là công nghệ phơi trên giàn lưới nhà kính giúp hạt cà phê phát triển hương vị đầy đủ mà không bị ẩm mốc. Mỗi cốc cà phê bạn thưởng thức đều mang trong mình cả tâm huyết của người nông dân Việt.', 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800', TRUE, 'https://www.youtube.com/embed/dQw4w9WgXcQ', TRUE),
 ('Cách phân biệt Arabica và Robusta chuẩn xác nhất', 'phan-biet-arabica-va-robusta', 'Bạn là người thích vị chua thanh hay đắng đậm? Cùng tìm hiểu sự kết hợp khác biệt cơ bản giữa hai dòng cà phê phổ biến nhất.', 'Arabica và Robusta là hai loại cà phê phổ biến nhất trên thế giới nhưng chúng mang những đặc điểm hoàn toàn khác biệt. Arabica ưa sống ở độ cao trên 1500m, hạt hình bầu dục dài, chứa lượng caffeine thấp (khoảng 1.5%) nhưng giàu axit hữu cơ, đem lại vị chua thanh, hương hoa quả thơm ngát. Ngược lại, Robusta sống ở độ cao thấp hơn dưới 800m, hạt tròn hơn, lượng caffeine gấp đôi (khoảng 2.7%), mang đến vị đắng đậm đà, ngậy béo. Tùy gu thưởng thức mà bạn có thể chọn dòng cà phê phù hợp.', 'https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=800', FALSE, NULL, TRUE),
 ('Nghệ thuật rang cà phê thủ công: Đánh thức hương vị ẩn giấu', 'nghe-thuat-rang-thu-cong', 'Rang cà phê là sự kết hợp giữa khoa học nhiệt độ và cảm quan nghệ thuật để giải phóng tinh chất hương vị.', 'Một hạt cà phê xanh hầu như không có hương vị gì đặc biệt. Chỉ có qua quá trình rang, dưới tác động của nhiệt độ thích hợp, các phản ứng hóa học (như phản ứng Maillard hay Caramel hóa) mới diễn ra để tạo ra hàng trăm hợp chất hương thơm đặc trưng. Người thợ rang tại Pureva phải theo dõi sát sao từng tiếng nổ của hạt cà phê (crack), ngửi mùi khói, và quan sát màu sắc hạt thay đổi liên tục để quyết định thời điểm xả mẻ rang phù hợp nhất cho từng profile Light, Medium hay Dark.', 'https://images.unsplash.com/photo-1524350876685-274059332603?q=80&w=800', FALSE, NULL, TRUE);
+
+-- Chèn Video Nông trại
+INSERT INTO farm_videos (title, description, videourl, thumbnailurl, isactive) VALUES
+('Quy trình phơi cà phê nhà kính', 'Khám phá quy trình phơi cà phê Arabica trong nhà kính giúp kiểm soát nhiệt độ và độ ẩm tối ưu tại Pureva.', 'https://www.youtube.com/embed/la5xZYw78Xw', 'https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=800', TRUE),
+('Khám phá vườn ươm hữu cơ', 'Góc nhìn từ vườn ươm, nơi những mầm cà phê đầu tiên được nuôi dưỡng bằng tình yêu và sự chăm sóc tỉ mỉ.', 'https://www.youtube.com/embed/dQw4w9WgXcQ', 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?q=80&w=800', TRUE);

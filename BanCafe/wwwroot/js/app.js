@@ -2,6 +2,7 @@
 let cart = [];
 let products = [];
 let blogs = [];
+let farmVideos = [];
 let currentLang = localStorage.getItem('pureva_lang') || 'VI';
 let websiteSettings = null;
 
@@ -331,6 +332,8 @@ function requestPageData() {
         sendHostMessage({ action: 'getProducts' });
     } else if (currentPath === 'blog.html' || currentPath.startsWith('blog-detail.html')) {
         sendHostMessage({ action: 'getBlogs' });
+    } else if (currentPath === '' || currentPath === 'index.html') {
+        sendHostMessage({ action: 'getFarmVideos' });
     } else if (currentPath === 'admin.html') {
         const currentUser = JSON.parse(localStorage.getItem('pureva_current_user') || 'null');
         if (currentUser && currentUser.isAdmin) {
@@ -386,11 +389,21 @@ async function handleBrowserFetch(msg) {
                 }
                 break;
             }
+            case 'getFarmVideos': {
+                const res = await fetch(`${API_BASE_URL}/farm-videos`);
+                const data = await res.json();
+                farmVideos = data;
+                if (typeof renderFarmVideos === 'function') {
+                    renderFarmVideos();
+                }
+                break;
+            }
             case 'getAdminData': {
                 const res = await fetch(`${API_BASE_URL}/admin/data`);
                 const data = await res.json();
                 products = data.products;
                 blogs = data.blogs;
+                farmVideos = data.farmVideos;
                 renderAdminDashboard(data);
                 break;
             }
@@ -544,6 +557,37 @@ async function handleBrowserFetch(msg) {
                 handleHostMessage({ action: 'crudResponse', success: data.success, message: data.message });
                 break;
             }
+            case 'saveFarmVideo': {
+                const res = await fetch(`${API_BASE_URL}/admin/farm-videos/save`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: msg.id,
+                        title: msg.title,
+                        description: msg.description,
+                        videoUrl: msg.videoUrl,
+                        thumbnailUrl: msg.thumbnailUrl,
+                        isActive: msg.isActive,
+                        imgFileName: msg.imgFileName,
+                        imgFileBase64: msg.imgFileBase64,
+                        vidFileName: msg.vidFileName,
+                        vidFileBase64: msg.vidFileBase64
+                    })
+                });
+                const data = await res.json();
+                handleHostMessage({ action: 'crudResponse', success: data.success, message: data.message });
+                break;
+            }
+            case 'deleteFarmVideo': {
+                const res = await fetch(`${API_BASE_URL}/admin/farm-videos/delete`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ id: msg.id })
+                });
+                const data = await res.json();
+                handleHostMessage({ action: 'crudResponse', success: data.success, message: data.message });
+                break;
+            }
             case 'saveSettings': {
                 const res = await fetch(`${API_BASE_URL}/admin/settings/save`, {
                     method: 'POST',
@@ -607,6 +651,7 @@ function handleHostMessage(msg) {
         case 'getAdminDataResponse':
             products = msg.products;
             blogs = msg.blogs;
+            farmVideos = msg.farmVideos;
             renderAdminDashboard(msg);
             break;
         case 'checkoutResponse':
@@ -1110,6 +1155,58 @@ function handleAdminLogin(event) {
     });
 }
 
+function renderFarmVideos() {
+    const container = document.getElementById('farm-videos-container');
+    if (!container) return;
+    
+    const sorted = [...farmVideos].sort((a, b) => new Date(b.CreatedAt) - new Date(a.CreatedAt));
+    
+    if (sorted.length === 0) {
+        container.innerHTML = `<p class="col-span-1 md:col-span-2 lg:col-span-3 text-center text-coffee-accent">${currentLang === 'EN' ? 'No videos found.' : 'Chưa có video nào.'}</p>`;
+        return;
+    }
+    
+    container.innerHTML = sorted.map(v => {
+        let mediaHtml = '';
+        if (v.VideoUrl) {
+            mediaHtml = `<iframe class="w-full aspect-video object-cover" src="${v.VideoUrl}" title="${v.Title}" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`;
+        } else if (v.ThumbnailUrl) {
+            mediaHtml = `<img src="${v.ThumbnailUrl}" alt="${v.Title}" class="w-full aspect-video object-cover">`;
+        } else {
+            mediaHtml = `<div class="w-full aspect-video bg-coffee flex items-center justify-center text-coffee-accent"><svg class="w-12 h-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>`;
+        }
+        
+        return `
+            <div class="bg-coffee-light border border-coffee-lighter rounded-lg overflow-hidden group">
+                <div class="relative overflow-hidden cursor-pointer" onclick="openFarmVideoModal('${v.VideoUrl || ''}')">
+                    ${mediaHtml}
+                    ${!v.VideoUrl && v.ThumbnailUrl ? `<div class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><svg class="w-16 h-16 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>` : ''}
+                </div>
+                <div class="p-6">
+                    <h3 class="font-serif text-xl text-coffee-gold mb-2">${v.Title}</h3>
+                    ${v.Description ? `<p class="text-coffee-accent text-sm line-clamp-3">${v.Description}</p>` : ''}
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function openFarmVideoModal(url) {
+    if (!url || url === 'undefined') return;
+    const modal = document.createElement('div');
+    modal.className = 'fixed inset-0 bg-black/90 z-[60] flex items-center justify-center p-4';
+    modal.innerHTML = `
+        <div class="relative w-full max-w-5xl aspect-video bg-black rounded-lg overflow-hidden shadow-2xl">
+            <button class="absolute -top-10 right-0 text-white hover:text-coffee-gold z-50 text-3xl" onclick="this.parentElement.parentElement.remove()">&times;</button>
+            <iframe class="w-full h-full" src="${url}?autoplay=1" title="Video Player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+        </div>
+    `;
+    modal.onclick = (e) => {
+        if (e.target === modal) modal.remove();
+    };
+    document.body.appendChild(modal);
+}
+
 function renderAdminDashboard(data) {
     // Stat summary
     document.getElementById('stat-orders').innerText = data.orders.length;
@@ -1252,6 +1349,26 @@ function renderAdminDashboard(data) {
                 <div class="flex space-x-2">
                     <button onclick="editBlog(${b.Id})" class="text-xs border border-coffee-gold text-coffee-gold px-2.5 py-1 rounded hover:bg-coffee-gold hover:text-coffee-dark">${currentLang === 'EN' ? 'Edit' : 'Sửa'}</button>
                     <button onclick="deleteBlog(${b.Id})" class="text-xs bg-red-600 hover:bg-red-500 text-white px-2.5 py-1 rounded">${currentLang === 'EN' ? 'Delete' : 'Xoá'}</button>
+                </div>
+            </div>
+        `).join('');
+    }
+
+    // Render Farm Videos list for CRUD
+    const farmVideosList = document.getElementById('admin-farm-videos-list');
+    if (farmVideosList && data.farmVideos) {
+        farmVideosList.innerHTML = data.farmVideos.map(v => `
+            <div class="flex items-center justify-between p-4 bg-coffee rounded border border-coffee-lighter/40">
+                <div class="flex items-center space-x-3">
+                    ${v.ThumbnailUrl ? `<img src="${v.ThumbnailUrl}" class="h-12 w-16 object-cover rounded bg-coffee-dark">` : `<div class="h-12 w-16 bg-coffee-dark rounded flex items-center justify-center"><svg class="h-6 w-6 text-coffee-lighter" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg></div>`}
+                    <div>
+                        <h4 class="text-sm font-bold text-white line-clamp-1">${v.Title}</h4>
+                        <p class="text-xs text-coffee-accent">${currentLang === 'EN' ? 'Added' : 'Thêm vào'}: ${new Date(v.CreatedAt).toLocaleDateString(currentLang === 'EN' ? 'en-US' : 'vi-VN')}</p>
+                    </div>
+                </div>
+                <div class="flex space-x-2">
+                    <button onclick="editFarmVideo(${v.Id})" class="text-xs border border-coffee-gold text-coffee-gold px-2.5 py-1 rounded hover:bg-coffee-gold hover:text-coffee-dark">${currentLang === 'EN' ? 'Edit' : 'Sửa'}</button>
+                    <button onclick="deleteFarmVideo(${v.Id})" class="text-xs bg-red-600 hover:bg-red-500 text-white px-2.5 py-1 rounded">${currentLang === 'EN' ? 'Delete' : 'Xoá'}</button>
                 </div>
             </div>
         `).join('');
@@ -1501,6 +1618,91 @@ async function handleSaveBlog(event) {
 function deleteBlog(id) {
     if (confirm(currentLang === 'EN' ? "Are you sure you want to delete this blog post?" : "Bạn có chắc muốn xoá bài viết này?")) {
         sendHostMessage({ action: 'deleteBlog', id: id });
+    }
+}
+
+let editingFarmVideoId = null;
+
+function showAddFarmVideoModal() {
+    editingFarmVideoId = null;
+    document.getElementById('farm-video-form').reset();
+    document.getElementById('farm-video-modal-title').innerText = currentLang === 'EN' ? "Add Farm Video" : "Thêm Video Mới";
+    document.getElementById('farm-video-modal').classList.remove('hidden');
+}
+
+function hideFarmVideoModal() {
+    document.getElementById('farm-video-modal').classList.add('hidden');
+}
+
+function editFarmVideo(id) {
+    const v = farmVideos.find(v => v.Id === id);
+    if (!v) return;
+    editingFarmVideoId = v.Id;
+    
+    document.getElementById('farm-video-title').value = v.Title;
+    document.getElementById('farm-video-desc').value = v.Description || '';
+    document.getElementById('farm-video-img').value = v.ThumbnailUrl || '';
+    document.getElementById('farm-video-url').value = v.VideoUrl || '';
+    
+    document.getElementById('farm-video-modal-title').innerText = currentLang === 'EN' ? "Edit Farm Video" : "Sửa Video Nông Trại";
+    document.getElementById('farm-video-modal').classList.remove('hidden');
+}
+
+async function handleSaveFarmVideo(event) {
+    event.preventDefault();
+    
+    const title = document.getElementById('farm-video-title').value;
+    const desc = document.getElementById('farm-video-desc').value;
+    const img = document.getElementById('farm-video-img').value;
+    const url = document.getElementById('farm-video-url').value;
+    
+    let imgFileName = '';
+    let imgFileBase64 = '';
+    let vidFileName = '';
+    let vidFileBase64 = '';
+    
+    const imgFileInput = document.getElementById('farm-video-img-file');
+    if (imgFileInput && imgFileInput.files.length > 0) {
+        const file = imgFileInput.files[0];
+        imgFileName = file.name;
+        try {
+            imgFileBase64 = await readFileAsBase64(file);
+        } catch (e) {
+            console.error("Error reading image file: ", e);
+        }
+    }
+    
+    const vidFileInput = document.getElementById('farm-video-file');
+    if (vidFileInput && vidFileInput.files.length > 0) {
+        const file = vidFileInput.files[0];
+        vidFileName = file.name;
+        try {
+            vidFileBase64 = await readFileAsBase64(file);
+        } catch (e) {
+            console.error("Error reading video file: ", e);
+        }
+    }
+        
+    sendHostMessage({
+        action: 'saveFarmVideo',
+        id: editingFarmVideoId,
+        title: title,
+        description: desc,
+        thumbnailUrl: img,
+        videoUrl: url,
+        isActive: true,
+        imgFileName: imgFileName,
+        imgFileBase64: imgFileBase64,
+        vidFileName: vidFileName,
+        vidFileBase64: vidFileBase64
+    });
+    
+    hideFarmVideoModal();
+}
+
+function deleteFarmVideo(id) {
+    if (confirm(currentLang === 'EN' ? "Are you sure you want to delete this video?" : "Bạn có chắc muốn xoá video này?")) {
+        sendHostMessage({ action: 'deleteFarmVideo', id: id });
     }
 }
 

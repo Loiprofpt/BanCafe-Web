@@ -105,6 +105,26 @@ app.get('/api/blogs', async (req, res) => {
   }
 });
 
+// 3.5 GET Farm Videos (Active only)
+app.get('/api/farm-videos', async (req, res) => {
+  try {
+    const result = await pool.query('SELECT * FROM farm_videos WHERE isactive = TRUE ORDER BY createdat DESC');
+    const farmVideos = result.rows.map(row => ({
+      Id: row.id,
+      Title: row.title,
+      Description: row.description,
+      VideoUrl: row.videourl,
+      ThumbnailUrl: row.thumbnailurl,
+      CreatedAt: row.createdat,
+      IsActive: row.isactive
+    }));
+    res.json(farmVideos);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
 // 4. Admin Authentication
 app.post('/api/admin/login', async (req, res) => {
   const { email, password } = req.body;
@@ -199,6 +219,18 @@ app.get('/api/admin/data', async (req, res) => {
       IsActive: row.isactive
     }));
 
+    // 5.5 Get Farm Videos
+    const farmVideosRes = await pool.query('SELECT * FROM farm_videos ORDER BY createdat DESC');
+    const farmVideos = farmVideosRes.rows.map(row => ({
+      Id: row.id,
+      Title: row.title,
+      Description: row.description,
+      VideoUrl: row.videourl,
+      ThumbnailUrl: row.thumbnailurl,
+      CreatedAt: row.createdat,
+      IsActive: row.isactive
+    }));
+
     // 6. Get Settings
     const settingsRes = await pool.query('SELECT settingkey, settingvalue, description FROM settings');
     const settings = settingsRes.rows.map(row => ({
@@ -213,6 +245,7 @@ app.get('/api/admin/data', async (req, res) => {
       designs,
       products,
       blogs,
+      farmVideos,
       settings
     });
   } catch (err) {
@@ -438,6 +471,53 @@ app.post('/api/admin/blogs/delete', async (req, res) => {
   const { id } = req.body;
   try {
     await pool.query('DELETE FROM blogs WHERE id = $1', [id]);
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Create or Save Farm Video
+app.post('/api/admin/farm-videos/save', async (req, res) => {
+  const { id, title, description, videoUrl, thumbnailUrl, isActive, vidFileName, vidFileBase64, imgFileName, imgFileBase64 } = req.body;
+  try {
+    let finalVideoUrl = videoUrl;
+    let finalThumbnailUrl = thumbnailUrl;
+
+    if (vidFileName && vidFileBase64) {
+      finalVideoUrl = saveBase64File(vidFileName, vidFileBase64, req);
+    }
+    if (imgFileName && imgFileBase64) {
+      finalThumbnailUrl = saveBase64File(imgFileName, imgFileBase64, req);
+    }
+
+    if (id) {
+      const query = `
+        UPDATE farm_videos 
+        SET title = $1, description = $2, videourl = $3, thumbnailurl = $4, isactive = $5
+        WHERE id = $6
+      `;
+      await pool.query(query, [title, description, finalVideoUrl, finalThumbnailUrl, isActive !== false, id]);
+    } else {
+      const query = `
+        INSERT INTO farm_videos (title, description, videourl, thumbnailurl, isactive) 
+        VALUES ($1, $2, $3, $4, $5)
+      `;
+      await pool.query(query, [title, description, finalVideoUrl, finalThumbnailUrl, isActive !== false]);
+    }
+    res.json({ success: true });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ success: false, message: err.message });
+  }
+});
+
+// Delete Farm Video
+app.post('/api/admin/farm-videos/delete', async (req, res) => {
+  const { id } = req.body;
+  try {
+    await pool.query('DELETE FROM farm_videos WHERE id = $1', [id]);
     res.json({ success: true });
   } catch (err) {
     console.error(err);
