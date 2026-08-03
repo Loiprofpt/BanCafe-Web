@@ -431,7 +431,7 @@ async function handleBrowserFetch(msg) {
                     })
                 });
                 const data = await res.json();
-                handleHostMessage({ action: 'checkoutResponse', success: data.success, message: data.message });
+                handleHostMessage({ action: 'checkoutResponse', success: data.success, message: data.message, orderId: data.orderId });
                 break;
             }
             case 'submitDesign': {
@@ -662,6 +662,16 @@ function handleHostMessage(msg) {
                 toggleCartDrawer(false);
                 const form = document.getElementById('checkout-form');
                 if (form) form.reset();
+                
+                const lastOrderStr = sessionStorage.getItem('lastOrder');
+                if (lastOrderStr) {
+                    try {
+                        const order = JSON.parse(lastOrderStr);
+                        order.orderId = msg.orderId;
+                        sessionStorage.setItem('lastOrder', JSON.stringify(order));
+                    } catch (e) {}
+                }
+                
                 window.location.href = 'order-success.html';
             } else {
                 sessionStorage.removeItem('lastOrder');

@@ -3,7 +3,16 @@ const cors = require('cors');
 const { Pool } = require('pg');
 const fs = require('fs');
 const path = require('path');
+const nodemailer = require('nodemailer');
 require('dotenv').config();
+
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.SMTP_USER,
+    pass: process.env.SMTP_PASS
+  }
+});
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -269,18 +278,61 @@ app.post('/api/checkout', async (req, res) => {
     `;
     const orderResult = await client.query(orderQuery, [customerName, customerEmail, customerPhone, shippingAddress, totalAmount]);
     const orderId = orderResult.rows[0].id;
+    const orderCode = `PV-${orderId + 1000}`;
     
     // Insert Order Items
     const itemQuery = `
       INSERT INTO orderitems (orderid, productid, roastlevel, quantity, price) 
       VALUES ($1, $2, $3, $4, $5)
     `;
+    let itemsListHtml = '';
     for (const item of items) {
       await client.query(itemQuery, [orderId, item.id, item.roastLevel || null, item.quantity, item.price]);
+      itemsListHtml += `<li>${item.name} (x${item.quantity}) - ${item.price.toLocaleString('vi-VN')}đ</li>`;
     }
     
     await client.query('COMMIT');
-    res.json({ success: true });
+
+    // Send Confirmation Email
+    if (customerEmail && process.env.SMTP_USER && process.env.SMTP_PASS) {
+      const mailOptions = {
+        from: process.env.SMTP_USER,
+        to: customerEmail,
+        subject: `Xác nhận đơn hàng ${orderCode} từ Pureva Craft`,
+        html: `
+          <h3>Cảm ơn ${customerName} đã đặt hàng tại Pureva Craft!</h3>
+          <p>Mã đơn hàng của bạn là: <strong style="color: #634A36; font-size: 16px;">${orderCode}</strong></p>
+          <p><strong>Danh sách sản phẩm:</strong></p>
+          <ul>
+            ${itemsListHtml}
+          </ul>
+          <p><strong>Tổng thanh toán:</strong> <span style="color: #d35400; font-size: 18px; font-weight: bold;">${totalAmount.toLocaleString('vi-VN')}đ</span></p>
+          <p><strong>Địa chỉ nhận hàng:</strong> ${shippingAddress}</p>
+          <hr/>
+          <h4>HƯỚNG DẪN THANH TOÁN</h4>
+          <p>Để hoàn tất đơn hàng, bạn vui lòng dùng ứng dụng ngân hàng quét mã QR dưới đây hoặc chuyển khoản số tiền <strong>${totalAmount.toLocaleString('vi-VN')}đ</strong> vào tài khoản sau:</p>
+          <ul>
+            <li>Ngân hàng: <strong>VietinBank</strong></li>
+            <li>Chủ tài khoản: <strong>DO HUU MINH TOAN</strong></li>
+            <li>Số tài khoản: <strong>103879522106</strong></li>
+            <li>Nội dung chuyển khoản: <strong>${orderCode}</strong></li>
+          </ul>
+          <p><em>(Quét mã QR dưới đây để tự động điền số tiền và nội dung chuyển khoản)</em></p>
+          <img src="https://img.vietqr.io/image/970415-103879522106-V5TjV6h.jpg?amount=${totalAmount}&addInfo=${orderCode}&accountName=DO%20HUU%20MINH%20TOAN" alt="Mã QR Thanh Toán" width="300" style="margin-top: 10px; border: 1px solid #ccc; border-radius: 8px;"/>
+          <p style="margin-top: 20px;">Chúng tôi sẽ liên hệ lại với bạn ngay sau khi nhận được thanh toán.</p>
+        `
+      };
+      
+      transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+          console.error("Error sending email: ", error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+    }
+
+    res.json({ success: true, orderId: orderCode });
   } catch (err) {
     await client.query('ROLLBACK');
     console.error(err);

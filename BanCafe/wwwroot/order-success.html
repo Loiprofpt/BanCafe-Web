@@ -103,10 +103,28 @@
                 </div>
             </div>
 
+            <!-- Payment QR Section -->
+            <div class="bg-white rounded-lg p-6 flex flex-col items-center justify-center space-y-4 shadow-inner">
+                <h3 class="text-coffee-dark font-bold font-serif text-lg">Hướng Dẫn Thanh Toán</h3>
+                <p class="text-xs text-gray-600 leading-relaxed px-4">Quét mã QR dưới đây bằng ứng dụng ngân hàng. Số tiền và nội dung sẽ được điền tự động.</p>
+                <div class="relative">
+                    <img id="payment-qr-img" src="" alt="VietQR" class="w-56 h-56 object-contain border border-gray-200 rounded p-2 hidden z-10 relative">
+                    <div id="payment-qr-skeleton" class="w-56 h-56 bg-gray-100 animate-pulse rounded border border-gray-200 absolute top-0 left-0"></div>
+                </div>
+                <div class="text-center text-xs text-gray-700 space-y-1 pt-2 border-t border-gray-100 w-full">
+                    <p>Ngân hàng: <strong>VietinBank</strong></p>
+                    <p>Chủ tài khoản: <strong>DO HUU MINH TOAN</strong></p>
+                    <p>Số tài khoản: <strong class="text-coffee-dark text-sm">103879522106</strong></p>
+                    <p>Nội dung: <strong id="transfer-content" class="text-forest text-sm">PV-123456</strong></p>
+                </div>
+            </div>
+
             <!-- Status Notice -->
-            <p class="text-xs text-coffee-accent/70 leading-relaxed max-w-sm mx-auto font-sans">
-                Pureva đã tiếp nhận thông tin và sẽ gọi điện thoại liên hệ trực tiếp cho bạn sau 10 - 15 phút để xác nhận đơn hàng và lịch giao.
-            </p>
+            <div class="bg-coffee-gold/10 border border-coffee-gold/30 rounded p-4">
+                <p class="text-xs text-coffee-gold leading-relaxed font-sans">
+                    Hệ thống đã gửi một <strong>Email xác nhận đơn hàng</strong> tới hộp thư của bạn. Vui lòng thanh toán để chúng tôi có thể xử lý và giao hàng cho bạn sớm nhất!
+                </p>
+            </div>
 
             <!-- Buttons -->
             <div class="flex flex-col sm:flex-row gap-3 pt-2">
@@ -139,13 +157,26 @@
                 try {
                     const order = JSON.parse(lastOrderStr);
                     
-                    // Generate a nice random invoice code using timestamp
-                    const randomCode = "PV-" + Math.floor(100000 + Math.random() * 900000);
+                    const orderCode = order.orderId || ("PV-" + Math.floor(100000 + Math.random() * 900000));
                     
-                    document.getElementById('summary-code').innerText = randomCode;
+                    document.getElementById('summary-code').innerText = orderCode;
                     document.getElementById('summary-name').innerText = order.customerName || (lang === 'EN' ? 'Pureva Customer' : 'Khách hàng Pureva');
                     document.getElementById('summary-phone').innerText = order.phone || '-';
                     document.getElementById('summary-total').innerText = order.totalAmount ? formatMoney(order.totalAmount) : '0đ';
+                    
+                    document.getElementById('transfer-content').innerText = orderCode;
+                    
+                    // Generate QR
+                    if (order.totalAmount) {
+                        const qrUrl = `https://img.vietqr.io/image/970415-103879522106-V5TjV6h.jpg?amount=${order.totalAmount}&addInfo=${orderCode}&accountName=DO%20HUU%20MINH%20TOAN`;
+                        const img = document.getElementById('payment-qr-img');
+                        img.onload = () => {
+                            img.classList.remove('hidden');
+                            const skeleton = document.getElementById('payment-qr-skeleton');
+                            if (skeleton) skeleton.classList.add('hidden');
+                        };
+                        img.src = qrUrl;
+                    }
                     
                     const now = new Date();
                     const dateStr = now.toLocaleDateString(lang === 'EN' ? 'en-US' : 'vi-VN') + " " + now.toLocaleTimeString(lang === 'EN' ? 'en-US' : 'vi-VN', { hour: '2-digit', minute: '2-digit' });
@@ -158,10 +189,12 @@
                 }
             } else {
                 // If visited directly without checkout context, load mock/empty state gracefully
-                document.getElementById('summary-code').innerText = "PV-" + Math.floor(100000 + Math.random() * 900000);
+                const mockOrderCode = "PV-" + Math.floor(100000 + Math.random() * 900000);
+                document.getElementById('summary-code').innerText = mockOrderCode;
                 document.getElementById('summary-name').innerText = lang === 'EN' ? 'Valued Customer' : 'Quý khách hàng';
                 document.getElementById('summary-phone').innerText = lang === 'EN' ? 'Registered via form' : 'Đăng ký qua form';
                 document.getElementById('summary-total').innerText = lang === 'EN' ? 'Free shipping' : 'Miễn phí vận chuyển';
+                document.getElementById('transfer-content').innerText = mockOrderCode;
                 
                 const now = new Date();
                 document.getElementById('summary-date').innerText = now.toLocaleDateString(lang === 'EN' ? 'en-US' : 'vi-VN');
