@@ -1258,12 +1258,12 @@ function renderAdminDashboard(data) {
     if (statVisitsEl) statVisitsEl.innerText = visitCount;
     
     // Revenue & Customers
-    let totalRevenue = 0;
+    let totalRevenue = 2500000; // Base fake revenue for demo purposes (includes external + 100k customers)
     const customersMap = new Map();
     
     data.orders.forEach(o => {
-        // Only count paid or all? Let's count all non-cancelled orders for revenue
-        if (o.Status !== 'Cancelled') {
+        // Count ONLY real orders for additional revenue (exclude the 100k fake ones)
+        if (o.Status !== 'Cancelled' && o.TotalAmount !== '100000.00' && o.TotalAmount !== 100000) {
             totalRevenue += parseFloat(o.TotalAmount) || 0;
         }
         
@@ -1345,7 +1345,7 @@ function renderAdminDashboard(data) {
     const ordersTbl = document.getElementById('admin-orders-table');
     if (ordersTbl) {
         // Filter out dummy orders from the "Orders" tab display
-        const displayOrders = data.orders.filter(o => o.TotalAmount !== '150000.00' && o.TotalAmount !== 150000);
+        const displayOrders = data.orders.filter(o => o.TotalAmount !== '100000.00' && o.TotalAmount !== 100000);
         
         if (displayOrders.length === 0) {
             ordersTbl.innerHTML = `<tr><td colspan="7" class="px-6 py-4 text-center text-sm text-coffee-accent">${currentLang === 'EN' ? 'No orders found' : 'Chưa có đơn hàng nào'}</td></tr>`;
