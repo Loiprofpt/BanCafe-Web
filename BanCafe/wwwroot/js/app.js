@@ -1241,7 +1241,90 @@ function renderAdminDashboard(data) {
     // Stat summary
     document.getElementById('stat-orders').innerText = data.orders.length;
     document.getElementById('stat-designs').innerText = data.designs.length;
-    document.getElementById('stat-products').innerText = data.products.length;
+    
+    // Revenue & Customers
+    let totalRevenue = 0;
+    const customersMap = new Map();
+    
+    data.orders.forEach(o => {
+        // Only count paid or all? Let's count all non-cancelled orders for revenue
+        if (o.Status !== 'Cancelled') {
+            totalRevenue += parseFloat(o.TotalAmount) || 0;
+        }
+        
+        // Group customers
+        const key = o.CustomerPhone || o.CustomerEmail || 'Unknown';
+        if (key !== 'Unknown') {
+            if (!customersMap.has(key)) {
+                customersMap.set(key, {
+                    name: o.CustomerName,
+                    phone: o.CustomerPhone,
+                    email: o.CustomerEmail,
+                    orderCount: 0,
+                    totalSpent: 0
+                });
+            }
+            const c = customersMap.get(key);
+            c.orderCount += 1;
+            c.totalSpent += parseFloat(o.TotalAmount) || 0;
+        }
+    });
+    
+    document.getElementById('stat-revenue').innerText = totalRevenue.toLocaleString('vi-VN') + 'đ';
+    document.getElementById('stat-customers').innerText = customersMap.size;
+    
+    // Render Customers Tab
+    const customersTbl = document.getElementById('admin-customers-table');
+    if (customersTbl) {
+        const sortedCustomers = Array.from(customersMap.values()).sort((a, b) => b.totalSpent - a.totalSpent);
+        if (sortedCustomers.length === 0) {
+            customersTbl.innerHTML = `<tr><td colspan="4" class="px-6 py-4 text-center text-sm text-coffee-accent">${currentLang === 'EN' ? 'No customers found' : 'Chưa có khách hàng nào'}</td></tr>`;
+        } else {
+            customersTbl.innerHTML = sortedCustomers.map(c => `
+                <tr class="border-b border-coffee-lighter/40 hover:bg-coffee/40">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-white">${c.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-coffee-accent">${c.phone || ''}<br/>${c.email || ''}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-white font-medium">${c.orderCount}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-coffee-gold font-bold">${c.totalSpent.toLocaleString('vi-VN')}đ</td>
+                </tr>
+            `).join('');
+        }
+    }
+    
+    // Top Products
+    const productsMap = new Map();
+    if (data.orderItems) {
+        data.orderItems.forEach(item => {
+            const pid = item.ProductId;
+            if (!productsMap.has(pid)) {
+                productsMap.set(pid, {
+                    name: item.ProductName || 'Sản phẩm ' + pid,
+                    quantity: 0,
+                    revenue: 0
+                });
+            }
+            const p = productsMap.get(pid);
+            p.quantity += parseInt(item.Quantity) || 0;
+            p.revenue += parseFloat(item.Price) * (parseInt(item.Quantity) || 0) || 0;
+        });
+    }
+    
+    const topProductsTbl = document.getElementById('admin-top-products-table');
+    if (topProductsTbl) {
+        const sortedProducts = Array.from(productsMap.values()).sort((a, b) => b.quantity - a.quantity).slice(0, 5); // Top 5
+        if (sortedProducts.length === 0) {
+            topProductsTbl.innerHTML = `<tr><td colspan="3" class="px-6 py-4 text-center text-sm text-coffee-accent">${currentLang === 'EN' ? 'No data yet' : 'Chưa có dữ liệu bán hàng'}</td></tr>`;
+        } else {
+            topProductsTbl.innerHTML = sortedProducts.map(p => `
+                <tr class="border-b border-coffee-lighter/40 hover:bg-coffee/40">
+                    <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-white">${p.name}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-white font-medium">${p.quantity}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-right text-coffee-gold font-bold">${p.revenue.toLocaleString('vi-VN')}đ</td>
+                </tr>
+            `).join('');
+        }
+    }
+    
     
     // Render orders
     const ordersTbl = document.getElementById('admin-orders-table');
