@@ -1263,9 +1263,9 @@ function renderAdminDashboard(data) {
     
     data.orders.forEach(o => {
         // Count ONLY real orders for additional revenue (exclude the 100k fake ones)
-        if (o.Status !== 'Cancelled' && o.TotalAmount !== '100000.00' && o.TotalAmount !== 100000) {
-            totalRevenue += parseFloat(o.TotalAmount) || 0;
-        }
+        // if (o.Status !== 'Cancelled' && o.TotalAmount !== '100000.00' && o.TotalAmount !== 100000) {
+        //     totalRevenue += parseFloat(o.TotalAmount) || 0;
+        // }
         
         // Group customers
         const key = o.CustomerPhone || o.CustomerEmail || 'Unknown';
