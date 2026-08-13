@@ -1252,8 +1252,8 @@ function openFarmVideoModal(url) {
 }
 
 function renderAdminDashboard(data) {
-    // Filter out dummy orders for accurate stats
-    const realOrders = data.orders.filter(o => o.TotalAmount !== '100000.00' && o.TotalAmount !== 100000);
+    // Filter out dummy orders for accurate stats (Removed filter to show all orders)
+    const realOrders = data.orders;
 
     // Lấy ra các đơn hàng thành công (Đã thanh toán hoặc Đã giao)
     const successfulOrders = realOrders.filter(o => ['Đã giao', 'Delivered', 'Đã thanh toán', 'Paid'].includes(o.Status));
