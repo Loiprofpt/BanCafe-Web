@@ -1360,7 +1360,7 @@ function renderAdminDashboard(data) {
         const displayOrders = realOrders;
         
         if (displayOrders.length === 0) {
-            ordersTbl.innerHTML = `<tr><td colspan="7" class="px-6 py-4 text-center text-sm text-coffee-accent">${currentLang === 'EN' ? 'No orders found' : 'Chưa có đơn hàng nào'}</td></tr>`;
+            ordersTbl.innerHTML = `<tr><td colspan="6" class="px-6 py-4 text-center text-sm text-coffee-accent">${currentLang === 'EN' ? 'No orders found' : 'Chưa có đơn hàng nào'}</td></tr>`;
         } else {
             ordersTbl.innerHTML = displayOrders.map(o => {
                 const date = new Date(o.CreatedAt).toLocaleString(currentLang === 'EN' ? 'en-US' : 'vi-VN');
@@ -1373,7 +1373,6 @@ function renderAdminDashboard(data) {
                         </td>
                         <td class="px-6 py-4 text-sm text-coffee-accent max-w-xs truncate" title="${o.ShippingAddress}">${o.ShippingAddress}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-coffee-gold font-bold">${formatMoney(o.TotalAmount)}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-coffee-accent">${date}</td>
                         <td class="px-6 py-4 whitespace-nowrap text-sm">
                             <select onchange="updateOrderStatus(${o.Id}, this.value)" class="bg-coffee border border-coffee-lighter text-xs rounded p-1 font-bold ${o.Status === 'Paid' ? 'text-green-400' : (o.Status === 'Pending' ? 'text-orange-400' : (o.Status === 'Cancelled' ? 'text-red-400' : 'text-white'))}">
                                 <option value="Pending" ${o.Status === 'Pending' ? 'selected' : ''}>${currentLang === 'EN' ? 'Pending Payment' : 'Chờ thanh toán'}</option>
