@@ -1252,8 +1252,15 @@ function openFarmVideoModal(url) {
 }
 
 function renderAdminDashboard(data) {
+    // Filter out dummy orders for accurate stats
+    const realOrders = data.orders.filter(o => o.TotalAmount !== '100000.00' && o.TotalAmount !== 100000);
+
+    // Lấy ra các đơn hàng thành công (Đã thanh toán hoặc Đã giao)
+    const successfulOrders = realOrders.filter(o => ['Đã giao', 'Delivered', 'Đã thanh toán', 'Paid'].includes(o.Status));
+    const successfulCount = successfulOrders.length;
+
     // Stat summary
-    document.getElementById('stat-orders').innerText = "25"; // Hardcoded for demo
+    document.getElementById('stat-orders').innerText = (25 + successfulCount).toString();
     document.getElementById('stat-designs').innerText = data.designs.length;
     
     // Visitor Count from settings
@@ -1266,14 +1273,14 @@ function renderAdminDashboard(data) {
     if (statVisitsEl) statVisitsEl.innerText = visitCount;
     
     // Revenue & Customers
-    let totalRevenue = 2500000; // Base fake revenue for demo purposes (includes external + 100k customers)
+    let totalRevenue = 2500000; // Fake revenue for demo
     const customersMap = new Map();
     
     data.orders.forEach(o => {
-        // Count ONLY real orders for additional revenue (exclude the 100k fake ones)
-        // if (o.Status !== 'Cancelled' && o.TotalAmount !== '100000.00' && o.TotalAmount !== 100000) {
-        //     totalRevenue += parseFloat(o.TotalAmount) || 0;
-        // }
+        // Count ONLY real orders for revenue
+        if (o.TotalAmount !== '100000.00' && o.TotalAmount !== 100000 && o.Status !== 'Cancelled' && o.Status !== 'Đã huỷ') {
+            totalRevenue += parseFloat(o.TotalAmount) || 0;
+        }
         
         // Group customers
         const key = o.CustomerPhone || o.CustomerEmail || 'Unknown';
@@ -1294,7 +1301,7 @@ function renderAdminDashboard(data) {
     });
     
     document.getElementById('stat-revenue').innerText = totalRevenue.toLocaleString('vi-VN') + 'đ';
-    document.getElementById('stat-customers').innerText = "25"; // Hardcoded for demo
+    document.getElementById('stat-customers').innerText = (25 + customersMap.size).toString();
     
     // Render Customers Tab
     const customersTbl = document.getElementById('admin-customers-table');
@@ -1316,25 +1323,36 @@ function renderAdminDashboard(data) {
     
     // Top Products
     const productsMap = new Map();
+    const successfulOrderIds = new Set(successfulOrders.map(o => o.Id));
+    
     if (data.orderItems) {
         data.orderItems.forEach(item => {
-            const pid = item.ProductId;
-            if (!productsMap.has(pid)) {
-                productsMap.set(pid, {
-                    name: item.ProductName || 'Sản phẩm ' + pid,
-                    quantity: 0,
-                    revenue: 0
-                });
+            // Only count items from successful real orders
+            if (successfulOrderIds.has(item.OrderId)) {
+                const pid = item.ProductId;
+                if (!productsMap.has(pid)) {
+                    productsMap.set(pid, {
+                        name: item.ProductName || 'Sản phẩm ' + pid,
+                        quantity: 0,
+                        revenue: 0
+                    });
+                }
+                const p = productsMap.get(pid);
+                p.quantity += parseInt(item.Quantity) || 0;
+                p.revenue += parseFloat(item.Price) * (parseInt(item.Quantity) || 0) || 0;
             }
-            const p = productsMap.get(pid);
-            p.quantity += parseInt(item.Quantity) || 0;
-            p.revenue += parseFloat(item.Price) * (parseInt(item.Quantity) || 0) || 0;
         });
     }
     
     const topProductsTbl = document.getElementById('admin-top-products-table');
     if (topProductsTbl) {
         const sortedProducts = Array.from(productsMap.values()).sort((a, b) => b.quantity - a.quantity).slice(0, 5); // Top 5
+        
+        // Hardcode Lượt mua = 25 (mặc định) + số lượng thật
+        sortedProducts.forEach(p => {
+            p.quantity = 25 + p.quantity;
+        });
+
         if (sortedProducts.length === 0) {
             topProductsTbl.innerHTML = `<tr><td colspan="3" class="px-6 py-4 text-center text-sm text-coffee-accent">${currentLang === 'EN' ? 'No data yet' : 'Chưa có dữ liệu bán hàng'}</td></tr>`;
         } else {
@@ -1353,7 +1371,7 @@ function renderAdminDashboard(data) {
     const ordersTbl = document.getElementById('admin-orders-table');
     if (ordersTbl) {
         // Filter out dummy orders from the "Orders" tab display
-        const displayOrders = data.orders.filter(o => o.TotalAmount !== '100000.00' && o.TotalAmount !== 100000);
+        const displayOrders = realOrders;
         
         if (displayOrders.length === 0) {
             ordersTbl.innerHTML = `<tr><td colspan="7" class="px-6 py-4 text-center text-sm text-coffee-accent">${currentLang === 'EN' ? 'No orders found' : 'Chưa có đơn hàng nào'}</td></tr>`;
