@@ -1301,7 +1301,7 @@ function renderAdminDashboard(data) {
     });
     
     document.getElementById('stat-revenue').innerText = totalRevenue.toLocaleString('vi-VN') + 'đ';
-    document.getElementById('stat-customers').innerText = (25 + customersMap.size).toString();
+    document.getElementById('stat-customers').innerText = (25 + successfulCount).toString();
     
     // Render Customers Tab
     const customersTbl = document.getElementById('admin-customers-table');
