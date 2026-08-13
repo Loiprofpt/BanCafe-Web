@@ -1325,11 +1325,20 @@ function renderAdminDashboard(data) {
     const productsMap = new Map();
     const successfulOrderIds = new Set(successfulOrders.map(o => o.Id));
     
+    // Đưa sẵn sản phẩm vào danh sách để demo luôn có dữ liệu
+    productsMap.set('demo_robusta', {
+        name: 'Cà Phê Bột Robusta',
+        quantity: 25,
+        revenue: 2500000
+    });
+    
     if (data.orderItems) {
         data.orderItems.forEach(item => {
             // Only count items from successful real orders
             if (successfulOrderIds.has(item.OrderId)) {
-                const pid = item.ProductId;
+                // Ưu tiên cộng dồn vào sản phẩm demo nếu có
+                const pid = item.ProductName && item.ProductName.includes('Robusta') ? 'demo_robusta' : item.ProductId;
+                
                 if (!productsMap.has(pid)) {
                     productsMap.set(pid, {
                         name: item.ProductName || 'Sản phẩm ' + pid,
@@ -1338,6 +1347,7 @@ function renderAdminDashboard(data) {
                     });
                 }
                 const p = productsMap.get(pid);
+                // Với sản phẩm demo, base đã là 25 và 2tr5, chỉ cộng thêm
                 p.quantity += parseInt(item.Quantity) || 0;
                 p.revenue += parseFloat(item.Price) * (parseInt(item.Quantity) || 0) || 0;
             }
@@ -1348,11 +1358,6 @@ function renderAdminDashboard(data) {
     if (topProductsTbl) {
         const sortedProducts = Array.from(productsMap.values()).sort((a, b) => b.quantity - a.quantity).slice(0, 5); // Top 5
         
-        // Hardcode Lượt mua = 25 (mặc định) + số lượng thật
-        sortedProducts.forEach(p => {
-            p.quantity = 25 + p.quantity;
-        });
-
         if (sortedProducts.length === 0) {
             topProductsTbl.innerHTML = `<tr><td colspan="3" class="px-6 py-4 text-center text-sm text-coffee-accent">${currentLang === 'EN' ? 'No data yet' : 'Chưa có dữ liệu bán hàng'}</td></tr>`;
         } else {
