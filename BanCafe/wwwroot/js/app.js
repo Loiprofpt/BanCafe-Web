@@ -1260,7 +1260,7 @@ function renderAdminDashboard(data) {
     const successfulCount = successfulOrders.length;
 
     // Stat summary
-    document.getElementById('stat-orders').innerText = (25 + successfulCount).toString();
+    document.getElementById('stat-orders').innerText = "25";
     document.getElementById('stat-designs').innerText = data.designs.length;
     
     // Visitor Count from settings
@@ -1300,8 +1300,8 @@ function renderAdminDashboard(data) {
         }
     });
     
-    document.getElementById('stat-revenue').innerText = totalRevenue.toLocaleString('vi-VN') + 'đ';
-    document.getElementById('stat-customers').innerText = (25 + successfulCount).toString();
+    document.getElementById('stat-revenue').innerText = "2.500.000đ";
+    document.getElementById('stat-customers').innerText = "25";
     
     // Render Customers Tab
     const customersTbl = document.getElementById('admin-customers-table');
@@ -1332,27 +1332,8 @@ function renderAdminDashboard(data) {
         revenue: 2500000
     });
     
-    if (data.orderItems) {
-        data.orderItems.forEach(item => {
-            // Only count items from successful real orders
-            if (successfulOrderIds.has(item.OrderId)) {
-                // Ưu tiên cộng dồn vào sản phẩm demo nếu có
-                const pid = item.ProductName && item.ProductName.includes('Robusta') ? 'demo_robusta' : item.ProductId;
-                
-                if (!productsMap.has(pid)) {
-                    productsMap.set(pid, {
-                        name: item.ProductName || 'Sản phẩm ' + pid,
-                        quantity: 0,
-                        revenue: 0
-                    });
-                }
-                const p = productsMap.get(pid);
-                // Với sản phẩm demo, base đã là 25 và 2tr5, chỉ cộng thêm
-                p.quantity += parseInt(item.Quantity) || 0;
-                p.revenue += parseFloat(item.Price) * (parseInt(item.Quantity) || 0) || 0;
-            }
-        });
-    }
+    // (Bỏ qua cộng dồn để luôn giữ chính xác 25)
+    // if (data.orderItems) { ... }
     
     const topProductsTbl = document.getElementById('admin-top-products-table');
     if (topProductsTbl) {
